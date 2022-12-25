@@ -1,0 +1,8 @@
+.DS_Store
+bin
+obj
+Data
+LocalCache
+Secrets
+Keys
+*.xcuserdatad
