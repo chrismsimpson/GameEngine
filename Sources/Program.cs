@@ -51,20 +51,127 @@ public struct Triangle {
             new Vec3D(x3, y3, z3)
         };
     }
+    
+    public Triangle(
+        Vec3D p1,
+        Vec3D p2,
+        Vec3D p3) {
+
+        this.P = new [] { p1, p2, p3 };
+    }
 }
 
 
 public struct Mesh {
 
-    public List<Triangle> Triangles { get; init; }
+    public Triangle[] Triangles { get; init; }
 
     ///
 
     public Mesh(
-        IEnumerable<Triangle> triangles) {
+        Triangle[] triangles) {
 
-        this.Triangles = triangles.ToList();
+        this.Triangles = triangles;
     }
+
+    public Mesh(
+        String filename) {
+
+        using var stream = File.Open(filename, FileMode.Open);
+
+        using var reader = new StreamReader(stream);
+
+        var verts = new List<Vec3D>();
+
+        var tris = new List<Triangle>();
+
+        while (!reader.EndOfStream) {
+
+            var line = reader.ReadLine();
+
+            if (String.IsNullOrWhiteSpace(line)) {
+
+                continue;
+            }
+
+            ///
+
+            if (line[0] == 'v') {
+
+                var lineSegments = line.Split(' ');
+
+                ///
+
+                float x = 0;
+
+                if (!float.TryParse(lineSegments[1], out x)) {
+
+                    throw new Exception();
+                }
+
+                ///
+
+                float y = 0;
+
+                if (!float.TryParse(lineSegments[2], out y)) {
+
+                    throw new Exception();
+                }
+
+                ///
+                
+                float z = 0;
+
+                if (!float.TryParse(lineSegments[3], out z)) {
+
+                    throw new Exception();
+                }
+
+                ///
+
+                verts.Add(new Vec3D(x, y, z));
+            }
+
+            if (line[0] == 'f') {
+
+                var lineSegments = line.Split(' ');
+
+                ///
+
+                int f1 = 0;
+
+                if (!int.TryParse(lineSegments[1], out f1)) {
+
+                    throw new Exception();
+                }
+
+                ///
+
+                int f2 = 0;
+
+                if (!int.TryParse(lineSegments[2], out f2)) {
+
+                    throw new Exception();
+                }
+
+                ///
+
+                int f3 = 0;
+
+                if (!int.TryParse(lineSegments[3], out f3)) {
+
+                    throw new Exception();
+                }
+
+                ///
+
+                tris.Add(new Triangle(verts[f1 - 1], verts[f2 - 1], verts[f3 - 1]));
+            }
+        }
+
+        this.Triangles = tris.ToArray();
+    }
+
 }
 
 public struct Mat4x4 {

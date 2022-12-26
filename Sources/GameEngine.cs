@@ -66,33 +66,35 @@ public sealed class GameEngine: IDisposable {
 
         ///
 
-        this.MeshCube = new Mesh(
-            new Triangle[] {
+        // this.MeshCube = new Mesh(
+        //     new Triangle[] {
                 
-                // SOUTH
-                new Triangle(0.0f, 0.0f, 0.0f,    0.0f, 1.0f, 0.0f,    1.0f, 1.0f, 0.0f),
-                new Triangle(0.0f, 0.0f, 0.0f,    1.0f, 1.0f, 0.0f,    1.0f, 0.0f, 0.0f),
+        //         // SOUTH
+        //         new Triangle(0.0f, 0.0f, 0.0f,    0.0f, 1.0f, 0.0f,    1.0f, 1.0f, 0.0f),
+        //         new Triangle(0.0f, 0.0f, 0.0f,    1.0f, 1.0f, 0.0f,    1.0f, 0.0f, 0.0f),
 
-                // EAST                                                      
-                new Triangle(1.0f, 0.0f, 0.0f,    1.0f, 1.0f, 0.0f,    1.0f, 1.0f, 1.0f),
-                new Triangle(1.0f, 0.0f, 0.0f,    1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 1.0f),
+        //         // EAST                                                      
+        //         new Triangle(1.0f, 0.0f, 0.0f,    1.0f, 1.0f, 0.0f,    1.0f, 1.0f, 1.0f),
+        //         new Triangle(1.0f, 0.0f, 0.0f,    1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 1.0f),
 
-                // NORTH                                                     
-                new Triangle(1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f),
-                new Triangle(1.0f, 0.0f, 1.0f,    0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f),
+        //         // NORTH                                                     
+        //         new Triangle(1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f),
+        //         new Triangle(1.0f, 0.0f, 1.0f,    0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f),
 
-                // WEST                                                      
-                new Triangle(0.0f, 0.0f, 1.0f,    0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f),
-                new Triangle(0.0f, 0.0f, 1.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, 0.0f),
+        //         // WEST                                                      
+        //         new Triangle(0.0f, 0.0f, 1.0f,    0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f),
+        //         new Triangle(0.0f, 0.0f, 1.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, 0.0f),
 
-                // TOP                                                       
-                new Triangle(0.0f, 1.0f, 0.0f,    0.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f),
-                new Triangle(0.0f, 1.0f, 0.0f,    1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 0.0f),
+        //         // TOP                                                       
+        //         new Triangle(0.0f, 1.0f, 0.0f,    0.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f),
+        //         new Triangle(0.0f, 1.0f, 0.0f,    1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 0.0f),
 
-                // BOTTOM                                                    
-                new Triangle(1.0f, 0.0f, 1.0f,    0.0f, 0.0f, 1.0f,    0.0f, 0.0f, 0.0f),
-                new Triangle(1.0f, 0.0f, 1.0f,    0.0f, 0.0f, 0.0f,    1.0f, 0.0f, 0.0f),
-            });
+        //         // BOTTOM                                                    
+        //         new Triangle(1.0f, 0.0f, 1.0f,    0.0f, 0.0f, 1.0f,    0.0f, 0.0f, 0.0f),
+        //         new Triangle(1.0f, 0.0f, 1.0f,    0.0f, 0.0f, 0.0f,    1.0f, 0.0f, 0.0f),
+        //     });
+
+        this.MeshCube = new Mesh(filename: "VideoShip.obj");
 
         
         this.HeightF = this.ScreenHeight * this.Scale;
@@ -242,13 +244,13 @@ public sealed class GameEngine: IDisposable {
 		matRotX.M[2][2] = MathF.Cos(this.fTheta * 0.5f);
 		matRotX.M[3][3] = 1;
 
-        var cubeVertCount = this.MeshCube.Triangles.Count * 3;
+        var cubeVertCount = this.MeshCube.Triangles.Length * 3;
 
         var cubeVerts = new SDL_Vertex[cubeVertCount];
 
         var cubeVertIdx = 0;
 
-        var cubeLineCount = this.MeshCube.Triangles.Count * 6;
+        var cubeLineCount = this.MeshCube.Triangles.Length * 6;
 
         var cubeLines = new SDL_FPoint[cubeLineCount];
 
@@ -257,6 +259,8 @@ public sealed class GameEngine: IDisposable {
         var ffFloat = Convert.ToSingle(0xff);
 
         var zeroTextCoord = new SDL_FPoint { };
+
+        var vecTrianglesToRender = new List<Triangle>();
 
         foreach (var tri in this.MeshCube.Triangles) {
 
@@ -277,9 +281,9 @@ public sealed class GameEngine: IDisposable {
             
 			// Offset into the screen
 			triTranslated = triRotatedZX;
-			triTranslated.P[0].Z = triRotatedZX.P[0].Z + 3.0f;
-			triTranslated.P[1].Z = triRotatedZX.P[1].Z + 3.0f;
-			triTranslated.P[2].Z = triRotatedZX.P[2].Z + 3.0f;
+			triTranslated.P[0].Z = triRotatedZX.P[0].Z + 8.0f;
+			triTranslated.P[1].Z = triRotatedZX.P[1].Z + 8.0f;
+			triTranslated.P[2].Z = triRotatedZX.P[2].Z + 8.0f;
 
             // calc normal
             var normal = new Vec3D();
@@ -300,9 +304,30 @@ public sealed class GameEngine: IDisposable {
 
             var l = MathF.Sqrt(normal.X * normal.X + normal.Y * normal.Y + normal.Z * normal.Z);
 
-            normal.X /= l;
-            normal.Y /= l;
-            normal.Z /= l;
+            // normal.X /= l;
+            // normal.Y /= l;
+            // normal.Z /= l;
+
+            normal.X = l == 0
+                ? normal.X > 0
+                    ? float.MaxValue
+                    : float.MinValue
+                : normal.X / l;
+
+            normal.Y = l == 0
+                ? normal.Y > 0
+                    ? float.MaxValue
+                    : float.MinValue
+                : normal.Y / l;
+
+            normal.Z = l == 0
+                ? normal.Z > 0
+                    ? float.MaxValue
+                    : float.MinValue
+                : normal.Z / l;
+
+
+            
 
             if (normal.X * (triTranslated.P[0].X - this.vCamera.X) +
                 normal.Y * (triTranslated.P[0].Y - this.vCamera.Y) +
@@ -317,9 +342,28 @@ public sealed class GameEngine: IDisposable {
 
             var ll = MathF.Sqrt(lightDirection.X * lightDirection.X + lightDirection.Y * lightDirection.Y + lightDirection.Z * lightDirection.Z);
 
-            lightDirection.X /= ll;
-            lightDirection.Y /= ll;
-            lightDirection.Z /= ll;
+            // lightDirection.X /= ll;
+            // lightDirection.Y /= ll;
+            // lightDirection.Z /= ll;
+
+            lightDirection.X = l == 0
+                ? lightDirection.X > 0
+                    ? float.MaxValue
+                    : float.MinValue
+                : lightDirection.X / l;
+
+            lightDirection.Y = l == 0
+                ? lightDirection.Y > 0
+                    ? float.MaxValue
+                    : float.MinValue
+                : lightDirection.Y / l;
+
+            lightDirection.Z = l == 0
+                ? lightDirection.Z > 0
+                    ? float.MaxValue
+                    : float.MinValue
+                : lightDirection.Z / l;
+
 
             var dp = normal.X * lightDirection.X + normal.Y * lightDirection.Y + normal.Z * lightDirection.Z;
 
@@ -349,11 +393,13 @@ public sealed class GameEngine: IDisposable {
             // cubeVerts[cubeVertIdx++] = new SDL_Vertex { position = new SDL_FPoint { x = triProjected.P[1].X, y = triProjected.P[1].Y }, color = new SDL_Color { r = 0x00, g = 0xff, b = 0x00, a = 0x00 }, tex_coord = new SDL_FPoint { } };
             // cubeVerts[cubeVertIdx++] = new SDL_Vertex { position = new SDL_FPoint { x = triProjected.P[2].X, y = triProjected.P[2].Y }, color = new SDL_Color { r = 0x00, g = 0x00, b = 0xff, a = 0x00 }, tex_coord = new SDL_FPoint { } };
 
+            new Triangle(triProjected.P[0], triProjected.P[1], triProjected.P[2]);
+
             var p1 = new SDL_FPoint { x = triProjected.P[0].X, y = triProjected.P[0].Y };
             var p2 = new SDL_FPoint { x = triProjected.P[1].X, y = triProjected.P[1].Y };
             var p3 = new SDL_FPoint { x = triProjected.P[2].X, y = triProjected.P[2].Y };
 
-            var shade = Convert.ToByte(ffFloat * dp);            
+            var shade = Convert.ToByte(ffFloat * Math.Max(0.0, MathF.Min(1.0f, dp)));
 
             var color = new SDL_Color { r = shade, g = shade, b = shade, a = 0xff };
 
@@ -370,6 +416,10 @@ public sealed class GameEngine: IDisposable {
             cubeLines[cubeLineIdx++] = p3;
             cubeLines[cubeLineIdx++] = p1;
         }
+
+
+
+        
 
         SDL_RenderGeometry(this.SDLRendererPtr, IntPtr.Zero, cubeVerts, cubeVertIdx, null, 0);
 
@@ -414,7 +464,7 @@ public sealed class GameEngine: IDisposable {
 
         var t = $"Triangles - fps: {MathF.Round(1.0f / elapsedTime, 0).ToString("F1")}, theta: {MathF.Round(this.fTheta, 2).ToString("F2")}";
 
-        WriteLine(t);
+        // WriteLine(t);
 
         SDL_SetWindowTitle(this.SDLWindowPtr, t);
     }
@@ -443,54 +493,6 @@ public sealed class GameEngine: IDisposable {
     }
 
     ///
-
-    public bool LoadFromObjectFile(
-        String filename) {
-
-        using var stream = File.Open(filename, FileMode.Open);
-
-        using var reader = new StreamReader(stream);
-
-        while (!reader.EndOfStream) {
-
-            var line = reader.ReadLine();
-
-            if (String.IsNullOrWhiteSpace(line)) {
-
-                continue;
-            }
-
-            ///
-
-            if (line[0] == 'v') {
-
-                var v = new Vec3D();
-
-                var lineSegments = line.Split(' ');
-
-                // v.X = lineSegments[1];
-                // v.Y = lineSegments[2];
-                // v.Z = lineSegments[3];
-
-                float x = 0;
-
-                if (!float.TryParse(lineSegments[1], out x)) {
-
-                    throw new Exception();
-                }
-
-                v.X = x;
-
-                
-            }
-
-        }
-
-
-
-        return true;
-    }
-
 
     ///
 
