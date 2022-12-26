@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "DeepScroll.SampleApp",
+            "name": "Triangles",
             "type": "coreclr",
             "request": "launch",
             "program": "${workspaceFolder}/Sources/bin/Debug/net6.0/Triangle.dll",
