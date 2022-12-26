@@ -116,9 +116,21 @@ public static partial class Program {
         return new Vec3D(x, y, z);
     }
 
+    public static int Main(
+        String[] args) {
 
+        // WriteLine($"hello foo!");
 
-    public static void Main(
+        using var app = new GameEngine(800, 640);
+
+        app.Run();
+
+        return 0;
+    }
+
+    
+
+    public static void Main2(
         String[] args) {
 
         var scale = 2.0f;
