@@ -9,16 +9,29 @@ public struct Vec3D {
     
     public float Z { get; set; }
 
+    public float W { get; set; }
+
     ///
+    
+    public Vec3D()
+        : this(0.0f, 0.0f, 0.0f, 1.0f) { }
 
     public Vec3D(
         float x,
         float y,
-        float z) {
+        float z)
+        : this(x, y, z, 1.0f) { }
+
+    public Vec3D(
+        float x,
+        float y,
+        float z,
+        float w) {
 
         this.X = x;
         this.Y = y;
         this.Z = z;
+        this.W = w;
     }
 }
 
@@ -26,7 +39,7 @@ public struct Triangle {
 
     public Vec3D[] P { get; init; }
 
-    public byte Shade { get; init; }
+    public byte Shade { get; set; }
 
     ///
 
