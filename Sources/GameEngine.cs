@@ -149,6 +149,10 @@ public sealed class GameEngine: IDisposable {
 
     ///
 
+    private bool RenderWireframes { get; set; } = true;
+
+    ///
+
     public void Run() {
 
         this.Active = true;
@@ -244,25 +248,13 @@ public sealed class GameEngine: IDisposable {
 		matRotX.M[2][2] = MathF.Cos(this.fTheta * 0.5f);
 		matRotX.M[3][3] = 1;
 
-        var cubeVertCount = this.MeshCube.Triangles.Length * 3;
-
-        var cubeVerts = new SDL_Vertex[cubeVertCount];
-
-        var cubeVertIdx = 0;
-
-        var cubeLineCount = this.MeshCube.Triangles.Length * 6;
-
-        var cubeLines = new SDL_FPoint[cubeLineCount];
-
-        var cubeLineIdx = 0;
-
         var ffFloat = Convert.ToSingle(0xff);
-
-        var zeroTextCoord = new SDL_FPoint { };
 
         var vecTrianglesToRender = new List<Triangle>();
 
-        foreach (var tri in this.MeshCube.Triangles) {
+        for (var i = 0; i < this.MeshCube.Triangles.Length; ++i)  {
+
+            var tri = this.MeshCube.Triangles[i];
 
             var triProjected = new Triangle();
             var triTranslated = new Triangle();
@@ -304,30 +296,9 @@ public sealed class GameEngine: IDisposable {
 
             var l = MathF.Sqrt(normal.X * normal.X + normal.Y * normal.Y + normal.Z * normal.Z);
 
-            // normal.X /= l;
-            // normal.Y /= l;
-            // normal.Z /= l;
-
-            normal.X = l == 0
-                ? normal.X > 0
-                    ? float.MaxValue
-                    : float.MinValue
-                : normal.X / l;
-
-            normal.Y = l == 0
-                ? normal.Y > 0
-                    ? float.MaxValue
-                    : float.MinValue
-                : normal.Y / l;
-
-            normal.Z = l == 0
-                ? normal.Z > 0
-                    ? float.MaxValue
-                    : float.MinValue
-                : normal.Z / l;
-
-
-            
+            normal.X /= l;
+            normal.Y /= l;
+            normal.Z /= l;
 
             if (normal.X * (triTranslated.P[0].X - this.vCamera.X) +
                 normal.Y * (triTranslated.P[0].Y - this.vCamera.Y) +
@@ -342,38 +313,22 @@ public sealed class GameEngine: IDisposable {
 
             var ll = MathF.Sqrt(lightDirection.X * lightDirection.X + lightDirection.Y * lightDirection.Y + lightDirection.Z * lightDirection.Z);
 
-            // lightDirection.X /= ll;
-            // lightDirection.Y /= ll;
-            // lightDirection.Z /= ll;
-
-            lightDirection.X = l == 0
-                ? lightDirection.X > 0
-                    ? float.MaxValue
-                    : float.MinValue
-                : lightDirection.X / l;
-
-            lightDirection.Y = l == 0
-                ? lightDirection.Y > 0
-                    ? float.MaxValue
-                    : float.MinValue
-                : lightDirection.Y / l;
-
-            lightDirection.Z = l == 0
-                ? lightDirection.Z > 0
-                    ? float.MaxValue
-                    : float.MinValue
-                : lightDirection.Z / l;
-
+            lightDirection.X /= ll;
+            lightDirection.Y /= ll;
+            lightDirection.Z /= ll;
 
             var dp = normal.X * lightDirection.X + normal.Y * lightDirection.Y + normal.Z * lightDirection.Z;
 
-            
-            
+            if (dp is float.NaN
+                || dp < 0) {
+
+                continue;
+            }
+
 			// Project triangles from 3D --> 2D
 			triProjected.P[0] = this.MultiplyMatrixVector(triTranslated.P[0], this.MatProj);
 			triProjected.P[1] = this.MultiplyMatrixVector(triTranslated.P[1], this.MatProj);
 			triProjected.P[2] = this.MultiplyMatrixVector(triTranslated.P[2], this.MatProj);
-
 
 			// Scale into view
 			triProjected.P[0].X += 1.0f; 
@@ -389,73 +344,45 @@ public sealed class GameEngine: IDisposable {
 			triProjected.P[2].X *= 0.5f * this.WidthF;
 			triProjected.P[2].Y *= 0.5f * this.HeightF;
 
-            // cubeVerts[cubeVertIdx++] = new SDL_Vertex { position = new SDL_FPoint { x = triProjected.P[0].X, y = triProjected.P[0].Y }, color = new SDL_Color { r = 0xff, g = 0x00, b = 0x00, a = 0x00 }, tex_coord = new SDL_FPoint { } };
-            // cubeVerts[cubeVertIdx++] = new SDL_Vertex { position = new SDL_FPoint { x = triProjected.P[1].X, y = triProjected.P[1].Y }, color = new SDL_Color { r = 0x00, g = 0xff, b = 0x00, a = 0x00 }, tex_coord = new SDL_FPoint { } };
-            // cubeVerts[cubeVertIdx++] = new SDL_Vertex { position = new SDL_FPoint { x = triProjected.P[2].X, y = triProjected.P[2].Y }, color = new SDL_Color { r = 0x00, g = 0x00, b = 0xff, a = 0x00 }, tex_coord = new SDL_FPoint { } };
+            byte shade = Convert.ToByte(255.0f * dp);
 
-            new Triangle(triProjected.P[0], triProjected.P[1], triProjected.P[2]);
+            vecTrianglesToRender.Add(new Triangle(triProjected.P[0], triProjected.P[1], triProjected.P[2], shade));
+        }
+
+        ///
+
+        vecTrianglesToRender.Sort((t1, t2) => t2.MidZ.CompareTo(t1.MidZ));
+
+        ///
+
+        var zeroTextCoord = new SDL_FPoint { };
+
+        SDL_SetRenderDrawColor(this.SDLRendererPtr, 0xff, 0x00, 0x00, 0xff); // line color
+
+        ///
+
+        foreach (var triProjected in vecTrianglesToRender) {
 
             var p1 = new SDL_FPoint { x = triProjected.P[0].X, y = triProjected.P[0].Y };
             var p2 = new SDL_FPoint { x = triProjected.P[1].X, y = triProjected.P[1].Y };
             var p3 = new SDL_FPoint { x = triProjected.P[2].X, y = triProjected.P[2].Y };
 
-            var shade = Convert.ToByte(ffFloat * Math.Max(0.0, MathF.Min(1.0f, dp)));
+            var color = new SDL_Color { r = triProjected.Shade, g = triProjected.Shade, b = triProjected.Shade, a = 0xff };
 
-            var color = new SDL_Color { r = shade, g = shade, b = shade, a = 0xff };
+            var verts = new [] {
+                new SDL_Vertex { position = p1, color = color, tex_coord = zeroTextCoord },
+                new SDL_Vertex { position = p2, color = color, tex_coord = zeroTextCoord },
+                new SDL_Vertex { position = p3, color = color, tex_coord = zeroTextCoord }
+            };
 
-            cubeVerts[cubeVertIdx++] = new SDL_Vertex { position = p1, color = color, tex_coord = zeroTextCoord };
-            cubeVerts[cubeVertIdx++] = new SDL_Vertex { position = p2, color = color, tex_coord = zeroTextCoord };
-            cubeVerts[cubeVertIdx++] = new SDL_Vertex { position = p3, color = color, tex_coord = zeroTextCoord };
+            SDL_RenderGeometry(this.SDLRendererPtr, IntPtr.Zero, verts, 3, null, 0);
 
-            cubeLines[cubeLineIdx++] = p1;
-            cubeLines[cubeLineIdx++] = p2;
+            if (this.RenderWireframes) {
 
-            cubeLines[cubeLineIdx++] = p2;
-            cubeLines[cubeLineIdx++] = p3;
-
-            cubeLines[cubeLineIdx++] = p3;
-            cubeLines[cubeLineIdx++] = p1;
-        }
-
-
-
-        
-
-        SDL_RenderGeometry(this.SDLRendererPtr, IntPtr.Zero, cubeVerts, cubeVertIdx, null, 0);
-
-        ///
-
-        SDL_SetRenderDrawColor(this.SDLRendererPtr, 0xff, 0x00, 0x00, 0xff);
-
-        for (var l = 0; l < cubeLineIdx;) {
-
-            // switch (l % 3) {
-
-            //     case 2:
-
-            //         SDL_SetRenderDrawColor(this.SDLRendererPtr, 0xff, 0x00, 0x00, 0xff);
-
-            //         break;
-
-            //     case 1:
-                
-            //         SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0xff, 0x00, 0xff);
-
-            //         break;
-
-            //     default:
-
-            //         SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0xff, 0xff);
-
-            //         break;
-            // }
-
-
-            var s = cubeLines[l++];
-
-            var e = cubeLines[l++];
-
-            SDL_RenderDrawLineF(this.SDLRendererPtr, s.x, s.y, e.x, e.y);
+                SDL_RenderDrawLineF(this.SDLRendererPtr, p1.x, p1.y, p2.x, p2.y);
+                SDL_RenderDrawLineF(this.SDLRendererPtr, p2.x, p2.y, p3.x, p3.y);
+                SDL_RenderDrawLineF(this.SDLRendererPtr, p3.x, p3.y, p1.x, p1.y);
+            }
         }
 
         SDL_RenderPresent(this.SDLRendererPtr);

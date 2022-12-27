@@ -26,10 +26,16 @@ public struct Triangle {
 
     public Vec3D[] P { get; init; }
 
+    public byte Shade { get; init; }
+
+    ///
+
+    public float MidZ { get => (this.P[0].Z + this.P[1].Z + this.P[2].Z) / 3.0f; }
+
     ///
 
     public Triangle()
-        : this(0, 0, 0, 0, 0, 0, 0, 0, 0) { }
+        : this(0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff) { }
 
     public Triangle(
         float x1,
@@ -42,7 +48,23 @@ public struct Triangle {
         
         float x3,
         float y3,
-        float z3) {
+        float z3)
+        : this(x1, y1, z1, x2, y2, z2, x3, y3, z3, 0xff) { }
+
+    public Triangle(
+        float x1,
+        float y1,
+        float z1,
+        
+        float x2,
+        float y2,
+        float z2,
+        
+        float x3,
+        float y3,
+        float z3,
+        
+        byte shade) {
 
         this.P = new [] {
 
@@ -50,14 +72,24 @@ public struct Triangle {
             new Vec3D(x2, y2, z2),
             new Vec3D(x3, y3, z3)
         };
-    }
+
+        this.Shade = shade;
+    }    
     
     public Triangle(
         Vec3D p1,
         Vec3D p2,
-        Vec3D p3) {
+        Vec3D p3)
+        : this(p1, p2, p3, 0xff) { }
+    
+    public Triangle(
+        Vec3D p1,
+        Vec3D p2,
+        Vec3D p3,
+        byte shade) {
 
         this.P = new [] { p1, p2, p3 };
+        this.Shade = shade;
     }
 }
 
