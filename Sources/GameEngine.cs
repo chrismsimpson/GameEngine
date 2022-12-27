@@ -46,8 +46,7 @@ public sealed class GameEngine: IDisposable {
         ///
 
         var windowFlags = SDL_WindowFlags.SDL_WINDOW_SHOWN
-            | SDL_WindowFlags.SDL_WINDOW_ALLOW_HIGHDPI;
-            // | SDL_WindowFlags.SDL_WINDOW_FULLSCREEN;             
+            | SDL_WindowFlags.SDL_WINDOW_ALLOW_HIGHDPI;        
         
         this.SDLWindowPtr = SDL_CreateWindow(
             title: "game",
@@ -57,7 +56,6 @@ public sealed class GameEngine: IDisposable {
             this.ScreenHeight,
             windowFlags);
 
-        // this.SDLRendererPtr = SDL_CreateRenderer(this.SDLWindowPtr, -1, SDL_RendererFlags.SDL_RENDERER_ACCELERATED | SDL_RendererFlags.SDL_RENDERER_PRESENTVSYNC);
         this.SDLRendererPtr = SDL_CreateRenderer(this.SDLWindowPtr, -1, SDL_RendererFlags.SDL_RENDERER_ACCELERATED);
 
         SDL_RenderSetScale(this.SDLRendererPtr, this.RenderScale, this.RenderScale);
