@@ -2,7 +2,7 @@
 namespace Triangle;
 
 public struct Vec3D {
-
+    
     public float X { get; set; }
     
     public float Y { get; set; }
@@ -248,7 +248,8 @@ public static partial class Program {
     public static int Main(
         String[] args) {
 
-        using var app = new GameEngine(800, 640);
+        // using var app = new GameEngine(800, 640);
+        using var app = new GameEngine(1024, 960);
 
         app.Run();
 

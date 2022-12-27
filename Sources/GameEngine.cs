@@ -1,6 +1,28 @@
 
 namespace Triangle;
 
+public struct KeyboardState { 
+
+    public byte[] Keys { get; init; }
+
+    public KeyboardState() {
+
+        throw new Exception();
+    }
+
+    public KeyboardState(
+        byte[] keys) {
+
+        this.Keys = keys;
+    }
+
+    public bool ContainsKey(
+        SDL_Keycode sdlKeyCode) {
+
+        return this.Keys[(byte) SDL_GetScancodeFromKey(sdlKeyCode)] == 1;
+    }
+}
+
 public sealed class GameEngine: IDisposable {
 
     public int ScreenWidth { get; init; }
@@ -97,6 +119,10 @@ public sealed class GameEngine: IDisposable {
     private Mat4x4 MatProj { get; set; }
 
     private Vec3D vCamera { get; set; }
+
+    private Vec3D vLookDir { get; set; }
+
+    private float fYaw { get; set; }
 
     private float fTheta { get; set; } = 0.0f;
 
@@ -196,22 +222,9 @@ public sealed class GameEngine: IDisposable {
         //     });
 
         // this.Mesh = new Mesh(filename: "VideoShip.obj");
-        this.Mesh = new Mesh(filename: "teapot.obj");
+        // this.Mesh = new Mesh(filename: "teapot.obj");
+        this.Mesh = new Mesh(filename: "axis.obj");
         
-
-        // this.fNear = 0.1f;
-        // this.fFar = 1000.0f;
-        // this.fFov = 90.0f;
-        // this.fAspectRatio = this.HeightF / this.WidthF;
-        // this.fFovRad = 1.0f / MathF.Tan(this.fFov * 0.5f / 180.0f * 3.14159f);
-
-        // this.MatProj.M[0][0] = this.fAspectRatio * this.fFovRad;
-        // this.MatProj.M[1][1] = this.fFovRad;
-        // this.MatProj.M[2][2] = this.fFar / (this.fFar - this.fNear);
-        // this.MatProj.M[3][2] = (-this.fFar * this.fNear) / (this.fFar - this.fNear);
-        // this.MatProj.M[2][3] = 1.0f;
-        // this.MatProj.M[3][3] = 0.0f;
-
         this.MatProj = this.MatrixMakeProjection(
             90.0f, 
             this.HeightF / this.WidthF,
@@ -226,42 +239,85 @@ public sealed class GameEngine: IDisposable {
         return true;
     }
 
+    public KeyboardState GetKeyboardState() {
+
+        int arraySize;
+        
+        IntPtr origArray = SDL_GetKeyboardState(out arraySize);
+        
+        byte[] keys = new byte[arraySize];
+        
+        Marshal.Copy(origArray, keys, 0, arraySize);
+
+        return new KeyboardState(keys);
+    }
+
     public void OnUpdate(
         float elapsedTime) {
+
+        var keyboardState = this.GetKeyboardState();
+
+        if (keyboardState.ContainsKey(SDL_Keycode.SDLK_UP)) {
+
+            this.vCamera = new Vec3D(this.vCamera.X, this.vCamera.Y + (8.0f * elapsedTime), this.vCamera.Z, this.vCamera.W);
+        }
+
+        if (keyboardState.ContainsKey(SDL_Keycode.SDLK_DOWN)) {
+        
+            this.vCamera = new Vec3D(this.vCamera.X, this.vCamera.Y - (8.0f * elapsedTime), this.vCamera.Z, this.vCamera.W);
+        }
+
+        if (keyboardState.ContainsKey(SDL_Keycode.SDLK_LEFT)) {
+
+            this.vCamera = new Vec3D(this.vCamera.X + (8.0f * elapsedTime), this.vCamera.Y, this.vCamera.Z, this.vCamera.W);
+        }
+
+        if (keyboardState.ContainsKey(SDL_Keycode.SDLK_RIGHT)) {
+        
+            this.vCamera = new Vec3D(this.vCamera.X - (8.0f * elapsedTime), this.vCamera.Y, this.vCamera.Z, this.vCamera.W);
+        }
+
+        var vForward = this.VectorMul(this.vLookDir, 8.0f * elapsedTime);
+
+        if (keyboardState.ContainsKey(SDL_Keycode.SDLK_w)) {
+        
+            this.vCamera = VectorAdd(this.vCamera, vForward);
+        }
+
+        if (keyboardState.ContainsKey(SDL_Keycode.SDLK_s)) {
+        
+            this.vCamera = VectorSub(this.vCamera, vForward);
+        }
+
+        if (keyboardState.ContainsKey(SDL_Keycode.SDLK_a)) {
+        
+            this.fYaw -= 2.0f * elapsedTime;
+        }
+        
+        if (keyboardState.ContainsKey(SDL_Keycode.SDLK_d)) {
+        
+            this.fYaw += 2.0f * elapsedTime;
+        }
+        
+
+        ///
 
         SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0x00, 0xff);
 
         SDL_RenderClear(this.SDLRendererPtr);
 
-        /// On loop
+        // Uncomment to spin me right round baby right round
 
-        this.fTheta += 1.0f * elapsedTime;
+        // this.fTheta += 1.0f * elapsedTime;
 
         ///
+
+        // Set up "World Tranmsform" though not updating theta 
+		// makes this a bit redundant
 
         var matRotZ = MatrixMakeRotationZ(this.fTheta * 0.5f);
 
         var matRotX = MatrixMakeRotationX(this.fTheta);
-
-        // var matRotZ = new Mat4x4();
-
-        // var matRotX = new Mat4x4();
-
-        // Rotation Z
-        // matRotZ.M[0][0] = MathF.Cos(this.fTheta);
-        // matRotZ.M[0][1] = MathF.Sin(this.fTheta);
-        // matRotZ.M[1][0] = -MathF.Sin(this.fTheta);
-        // matRotZ.M[1][1] = MathF.Cos(this.fTheta);
-        // matRotZ.M[2][2] = 1;
-        // matRotZ.M[3][3] = 1;
-
-        // Rotation X
-        // matRotX.M[0][0] = 1;
-        // matRotX.M[1][1] = MathF.Cos(this.fTheta * 0.5f);
-        // matRotX.M[1][2] = MathF.Sin(this.fTheta * 0.5f);
-        // matRotX.M[2][1] = -MathF.Sin(this.fTheta * 0.5f);
-        // matRotX.M[2][2] = MathF.Cos(this.fTheta * 0.5f);
-        // matRotX.M[3][3] = 1;
 
         ///
 
@@ -271,8 +327,23 @@ public sealed class GameEngine: IDisposable {
         matWorld = MatrixMultiplyMatrix(matRotZ, matRotX);
         matWorld = MatrixMultiplyMatrix(matWorld, matTrans);
 
+        var vUp = new Vec3D(0.0f, 1.0f, 0.0f);
+
+        var vTarget = new Vec3D(0.0f, 0.0f, 1.0f);
+
+        var matCameraRot = this.MatrixMakeRotationY(this.fYaw);
+
+        this.vLookDir = MatrixMultiplyVector(matCameraRot, vTarget);
+
+        vTarget = VectorAdd(this.vCamera, this.vLookDir);
+
+        var matCamera = this.MatrixPointAt(this.vCamera, vTarget, vUp);
+
+        var matView = this.MatrixQuickInverse(matCamera);
+
         var ffFloat = Convert.ToSingle(0xff);
 
+        // Store triangles for rasterizing later
         var vecTrianglesToRender = new List<Triangle>();       
 
         if (this.Mesh is Mesh mesh) {
@@ -281,73 +352,35 @@ public sealed class GameEngine: IDisposable {
 
                 var tri = mesh.Triangles[i];
 
-                var triProjected = new Triangle();
-                // var triTranslated = new Triangle();
-                // var triRotatedZ = new Triangle();
-                // var triRotatedZX = new Triangle();
+                ///
 
+                var triProjected = new Triangle();
+                
                 var triTransformed = new Triangle();
 
-                // // Rotate in Z-Axis
-                // triRotatedZ.P[0] = this.MultiplyMatrixVector(tri.P[0], matRotZ);
-                // triRotatedZ.P[1] = this.MultiplyMatrixVector(tri.P[1], matRotZ);
-                // triRotatedZ.P[2] = this.MultiplyMatrixVector(tri.P[2], matRotZ);
-                
-                // // Rotate in X-Axis
-                // triRotatedZX.P[0] = this.MultiplyMatrixVector(triRotatedZ.P[0], matRotX);
-                // triRotatedZX.P[1] = this.MultiplyMatrixVector(triRotatedZ.P[1], matRotX);
-                // triRotatedZX.P[2] = this.MultiplyMatrixVector(triRotatedZ.P[2], matRotX);
-                
-                // // Offset into the screen
-                // triTranslated = triRotatedZX;
-                // triTranslated.P[0].Z = triRotatedZX.P[0].Z + 8.0f;
-                // triTranslated.P[1].Z = triRotatedZX.P[1].Z + 8.0f;
-                // triTranslated.P[2].Z = triRotatedZX.P[2].Z + 8.0f;
+                var triViewed = new Triangle();
 
+                // World Matrix Transform
                 triTransformed.P[0] = this.MatrixMultiplyVector(matWorld, tri.P[0]);
                 triTransformed.P[1] = this.MatrixMultiplyVector(matWorld, tri.P[1]);
                 triTransformed.P[2] = this.MatrixMultiplyVector(matWorld, tri.P[2]);
 
-                // Use Cross-Product to get surface normal
-                // var normal = new Vec3D();
-                // var line1 = new Vec3D();
-                // var line2 = new Vec3D();
-
-                // line1.X = triTranslated.P[1].X - triTranslated.P[0].X;
-                // line1.Y = triTranslated.P[1].Y - triTranslated.P[0].Y;
-                // line1.Z = triTranslated.P[1].Z - triTranslated.P[0].Z;
-
+                // Calculate triangle Normal
+                // Get lines either side of triangle
                 var line1 = VectorSub(triTransformed.P[1], triTransformed.P[0]);
-
-                // line2.X = triTranslated.P[2].X - triTranslated.P[0].X;
-                // line2.Y = triTranslated.P[2].Y - triTranslated.P[0].Y;
-                // line2.Z = triTranslated.P[2].Z - triTranslated.P[0].Z;
-
                 var line2 = VectorSub(triTransformed.P[2], triTransformed.P[0]);
 
-                // normal.X = line1.Y * line2.Z - line1.Z * line2.Y;
-                // normal.Y = line1.Z * line2.X - line1.X * line2.Z;
-                // normal.Z = line1.X * line2.Y - line1.Y * line2.X;
-
+                // Take cross product of lines to get normal to triangle surface
                 var normal = VectorCrossProduct(line1, line2);
 
+                // You normally need to normalise a normal!
                 normal = VectorNormalise(normal);
 
-                // var l = MathF.Sqrt(normal.X * normal.X + normal.Y * normal.Y + normal.Z * normal.Z);
-
-                // normal.X /= l;
-                // normal.Y /= l;
-                // normal.Z /= l;
-
-                // if (normal.X * (triTranslated.P[0].X - this.vCamera.X) +
-                //     normal.Y * (triTranslated.P[0].Y - this.vCamera.Y) +
-                //     normal.Z * (triTranslated.P[0].Z - this.vCamera.Z) >= 0) {
-
-                //     continue;
-                // }
+                // Get Ray from triangle to camera
 
                 var vCameraRay = this.VectorSub(triTransformed.P[0], this.vCamera);
 
+                // If ray is aligned with normal, then triangle is visible
                 if (this.VectorDotProduct(normal, vCameraRay) >= 0.0f) {
 
                     continue;
@@ -356,17 +389,9 @@ public sealed class GameEngine: IDisposable {
                 // Illumination
 
                 var lightDirection = new Vec3D(0, 0, -1.0f);
-
-                // var ll = MathF.Sqrt(lightDirection.X * lightDirection.X + lightDirection.Y * lightDirection.Y + lightDirection.Z * lightDirection.Z);
-
-                // lightDirection.X /= ll;
-                // lightDirection.Y /= ll;
-                // lightDirection.Z /= ll;
-
-                // var dp = normal.X * lightDirection.X + normal.Y * lightDirection.Y + normal.Z * lightDirection.Z;
-
                 lightDirection = VectorNormalise(lightDirection);
 
+                // How "aligned" are light direction and triangle surface normal?
                 var dp = MathF.Max(0.1f, this.VectorDotProduct(lightDirection, normal));
 
                 if (dp is float.NaN
@@ -379,30 +404,34 @@ public sealed class GameEngine: IDisposable {
 
                 triTransformed.Shade = shade;
 
+                // Convert World Space --> View space 
+
+                triViewed.P[0] = this.MatrixMultiplyVector(matView, triTransformed.P[0]);
+                triViewed.P[1] = this.MatrixMultiplyVector(matView, triTransformed.P[1]);
+                triViewed.P[2] = this.MatrixMultiplyVector(matView, triTransformed.P[2]);
+
                 // Project triangles from 3D --> 2D
-
-                // triProjected.P[0] = this.MultiplyMatrixVector(triTranslated.P[0], this.MatProj);
-                // triProjected.P[1] = this.MultiplyMatrixVector(triTranslated.P[1], this.MatProj);
-                // triProjected.P[2] = this.MultiplyMatrixVector(triTranslated.P[2], this.MatProj);
-
-                triProjected.P[0] = this.MatrixMultiplyVector(this.MatProj, triTransformed.P[0]);
-                triProjected.P[1] = this.MatrixMultiplyVector(this.MatProj, triTransformed.P[1]);
-                triProjected.P[2] = this.MatrixMultiplyVector(this.MatProj, triTransformed.P[2]);
+                triProjected.P[0] = this.MatrixMultiplyVector(this.MatProj, triViewed.P[0]);
+                triProjected.P[1] = this.MatrixMultiplyVector(this.MatProj, triViewed.P[1]);
+                triProjected.P[2] = this.MatrixMultiplyVector(this.MatProj, triViewed.P[2]);
                 triProjected.Shade = triTransformed.Shade;
 
+                // Scale into view, we moved the normalising into cartesian space
+                // out of the matrix.vector function from the previous videos, so
+                // do this manually
                 triProjected.P[0] = VectorDiv(triProjected.P[0], triProjected.P[0].W);
                 triProjected.P[1] = VectorDiv(triProjected.P[1], triProjected.P[1].W);
                 triProjected.P[2] = VectorDiv(triProjected.P[2], triProjected.P[2].W);
 
-                // Scale into view
+                // X/Y are inverted so put them back
+                triProjected.P[0].X *= -1.0f;
+                triProjected.P[1].X *= -1.0f;
+                triProjected.P[2].X *= -1.0f;
+                triProjected.P[0].Y *= -1.0f;
+                triProjected.P[1].Y *= -1.0f;
+                triProjected.P[2].Y *= -1.0f;
 
-                // triProjected.P[0].X += 1.0f; 
-                // triProjected.P[0].Y += 1.0f;
-                // triProjected.P[1].X += 1.0f; 
-                // triProjected.P[1].Y += 1.0f;
-                // triProjected.P[2].X += 1.0f; 
-                // triProjected.P[2].Y += 1.0f;
-
+                // Offset verts into visible normalised space
                 var vOffsetView = new Vec3D(1.0f, 1.0f, 0.0f);
 
                 triProjected.P[0] = VectorAdd(triProjected.P[0], vOffsetView);
@@ -417,7 +446,7 @@ public sealed class GameEngine: IDisposable {
                 triProjected.P[2].Y *= 0.5f * this.HeightF;
 
                 
-
+                // Store triangle for sorting
                 vecTrianglesToRender.Add(new Triangle(triProjected.P[0], triProjected.P[1], triProjected.P[2], shade));
             }
 
