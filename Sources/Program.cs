@@ -39,7 +39,9 @@ public struct Triangle {
 
     public Vec3D[] P { get; init; }
 
-    public byte Shade { get; set; }
+    // public byte Shade { get; set; }
+
+    public SDL_Color Color { get; set; }
 
     ///
 
@@ -48,7 +50,8 @@ public struct Triangle {
     ///
 
     public Triangle()
-        : this(0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff) { }
+        // : this(0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff) { }
+        : this(0, 0, 0, 0, 0, 0, 0, 0, 0, new SDL_Color { r = 0xff, g = 0xff, b = 0xff, a = 0xff }) { }
 
     public Triangle(
         float x1,
@@ -62,7 +65,9 @@ public struct Triangle {
         float x3,
         float y3,
         float z3)
-        : this(x1, y1, z1, x2, y2, z2, x3, y3, z3, 0xff) { }
+        // : this(x1, y1, z1, x2, y2, z2, x3, y3, z3, 0xff) { }
+        : this(x1, y1, z1, x2, y2, z2, x3, y3, z3, new SDL_Color { r = 0xff, g = 0xff, b = 0xff, a = 0xff }) { }
+
 
     public Triangle(
         float x1,
@@ -77,7 +82,8 @@ public struct Triangle {
         float y3,
         float z3,
         
-        byte shade) {
+        // byte shade) {
+        SDL_Color color) {
 
         this.P = new [] {
 
@@ -86,23 +92,27 @@ public struct Triangle {
             new Vec3D(x3, y3, z3)
         };
 
-        this.Shade = shade;
+        // this.Shade = shade;
+        this.Color = color;
     }    
     
     public Triangle(
         Vec3D p1,
         Vec3D p2,
         Vec3D p3)
-        : this(p1, p2, p3, 0xff) { }
+        // : this(p1, p2, p3, 0xff) { }
+        : this(p1, p2, p3, new SDL_Color { r = 0xff, g = 0xff, b = 0xff, a = 0xff }) { }
     
     public Triangle(
         Vec3D p1,
         Vec3D p2,
         Vec3D p3,
-        byte shade) {
+        // byte shade) {
+        SDL_Color color) {
 
         this.P = new [] { p1, p2, p3 };
-        this.Shade = shade;
+        // this.Shade = shade;
+        this.Color = color;
     }
 }
 
@@ -249,7 +259,10 @@ public static partial class Program {
         String[] args) {
 
         // using var app = new GameEngine(800, 640);
-        using var app = new GameEngine(1024, 960);
+        // using var app = new GameEngine(1024, 960);
+        // using var app = new GameEngine(384, 216);
+        // using var app = new GameEngine(1536, 864);
+        using var app = new GameEngine(1280, 832);
 
         app.Run();
 
