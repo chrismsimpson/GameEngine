@@ -1,6 +1,6 @@
 # Game Engine
 
-![](./ScreenShots/teapot.png)
+![](./Screenshots/teapot.png)
 
 This glob of code is very much based on the [olcPixelGameEngine](https://github.com/OneLoneCoder/olcPixelGameEngine), specifically the version represented in this [YouTube tutorial](https://www.youtube.com/watch?v=HXSuNxpCzdM&t=3059s).
 
