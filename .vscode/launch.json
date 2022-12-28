@@ -2,10 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Triangles",
+            "name": "GameEngine",
             "type": "coreclr",
             "request": "launch",
-            "program": "${workspaceFolder}/Sources/bin/Debug/net6.0/Triangle.dll",
+            "program": "${workspaceFolder}/Sources/bin/Debug/net6.0/GameEngine.dll",
             "args": [
                 
             ],

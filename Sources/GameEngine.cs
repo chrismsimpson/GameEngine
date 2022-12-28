@@ -1,5 +1,5 @@
 
-namespace Triangle;
+namespace olc;
 
 public struct KeyboardState { 
 
@@ -105,16 +105,6 @@ public sealed class GameEngine: IDisposable {
     private float HeightF { get; set; } = 0;
 
     private float WidthF { get; set; } = 0;
-
-    // private float fNear { get; set; } = 0;
-
-    // private float fFar { get; set; } = 0;
-
-    // private float fFov { get; set; } = 0;
-
-    // private float fAspectRatio { get; set; } = 0;
-
-    // private float fFovRad { get; set; } = 0;
 
     private Mat4x4 MatProj { get; set; }
 
@@ -465,8 +455,6 @@ public sealed class GameEngine: IDisposable {
 
         vecTrianglesToRender.Sort((t1, t2) => t2.MidZ.CompareTo(t1.MidZ));
 
-        // vecTrianglesToRender.Sort((t1, t2) => t1.MidZ > t2.MidZ ? -1 : 1);
-
         ///
 
         var zeroTextCoord = new SDL_FPoint { };
@@ -474,30 +462,6 @@ public sealed class GameEngine: IDisposable {
         SDL_SetRenderDrawColor(this.SDLRendererPtr, 0xff, 0x00, 0x00, 0xff); // line color
 
         ///
-
-        // foreach (var triProjected in vecTrianglesToRender) {
-
-        //     var p1 = new SDL_FPoint { x = triProjected.P[0].X, y = triProjected.P[0].Y };
-        //     var p2 = new SDL_FPoint { x = triProjected.P[1].X, y = triProjected.P[1].Y };
-        //     var p3 = new SDL_FPoint { x = triProjected.P[2].X, y = triProjected.P[2].Y };
-
-        //     // var color = new SDL_Color { r = triProjected.Shade, g = triProjected.Shade, b = triProjected.Shade, a = 0xff };
-
-        //     var verts = new [] {
-        //         new SDL_Vertex { position = p1, color = triProjected.Color, tex_coord = zeroTextCoord },
-        //         new SDL_Vertex { position = p2, color = triProjected.Color, tex_coord = zeroTextCoord },
-        //         new SDL_Vertex { position = p3, color = triProjected.Color, tex_coord = zeroTextCoord }
-        //     };
-
-        //     SDL_RenderGeometry(this.SDLRendererPtr, IntPtr.Zero, verts, 3, null, 0);
-
-        //     if (this.RenderWireframes) {
-
-        //         SDL_RenderDrawLineF(this.SDLRendererPtr, p1.x, p1.y, p2.x, p2.y);
-        //         SDL_RenderDrawLineF(this.SDLRendererPtr, p2.x, p2.y, p3.x, p3.y);
-        //         SDL_RenderDrawLineF(this.SDLRendererPtr, p3.x, p3.y, p1.x, p1.y);
-        //     }
-        // }
 
         foreach (var triToRaster in vecTrianglesToRender) {
 
@@ -593,33 +557,10 @@ public sealed class GameEngine: IDisposable {
 
         var t = $"Triangles - fps: {MathF.Round(1.0f / elapsedTime, 0).ToString("F1")}, theta: {MathF.Round(this.fTheta, 2).ToString("F2")}";
 
-        // WriteLine(t);
-
         SDL_SetWindowTitle(this.SDLWindowPtr, t);
     }
 
     ///
-
-
-    // public Vec3D MultiplyMatrixVector(in Vec3D i, in Mat4x4 m) {
-
-    //     var x = i.X * m.M[0][0] + i.Y * m.M[1][0] + i.Z * m.M[2][0] + m.M[3][0];
-
-    //     var y = i.X * m.M[0][1] + i.Y * m.M[1][1] + i.Z * m.M[2][1] + m.M[3][1];
-
-    //     var z = i.X * m.M[0][2] + i.Y * m.M[1][2] + i.Z * m.M[2][2] + m.M[3][2];
-        
-    //     var w = i.X * m.M[0][3] + i.Y * m.M[1][3] + i.Z * m.M[2][3] + m.M[3][3];
-
-    //     if (w != 0.0f) {
-
-    //         x /= w; 
-    //         y /= w; 
-    //         z /= w;
-    //     }
-
-    //     return new Vec3D(x, y, z);
-    // }
 
     public Vec3D MatrixMultiplyVector(in Mat4x4 m, in Vec3D i) {
 
