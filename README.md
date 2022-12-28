@@ -8,6 +8,6 @@ Instead of using the original engine, or it's C++ header file, I am using bare b
 
 ## Why SDL2? 
 
-SDL2 seems quite promising. The recently added SDL_RenderGeometry API means all triangle drawing can be done on the GPU essentially natively (as is in this repo), without having to call into specificl GPU APIs (Vulkan/DirectX/Metal etc.). There's also a proposed equivalent shader API in the works.
+SDL2 seems quite promising. The recently added SDL_RenderGeometry API means all triangle drawing can be done on the GPU essentially natively (as is in this repo), without having to call into specific GPU APIs (Vulkan/DirectX/Metal etc.). There's also a proposed equivalent shader API in the works.
 
 
