@@ -118,8 +118,8 @@ public sealed class GameEngine: IDisposable {
 
     ///
 
-    // private bool RenderWireframes { get; set; } = true;
-    private bool RenderWireframes { get; set; } = false;
+    private bool RenderWireframes { get; set; } = true;
+    // private bool RenderWireframes { get; set; } = false;
 
     ///
 
@@ -212,8 +212,8 @@ public sealed class GameEngine: IDisposable {
         //     });
 
         // this.Mesh = new Mesh(filename: "VideoShip.obj");
-        this.Mesh = new Mesh(filename: "teapot.obj");
-        // this.Mesh = new Mesh(filename: "axis.obj");
+        // this.Mesh = new Mesh(filename: "teapot.obj");
+        this.Mesh = new Mesh(filename: "axis.obj");
         
         this.MatProj = this.MatrixMakeProjection(
             90.0f, 
