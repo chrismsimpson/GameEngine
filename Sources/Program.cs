@@ -45,10 +45,12 @@ public struct Triangle {
 
     public float MidZ { get => (this.P[0].Z + this.P[1].Z + this.P[2].Z) / 3.0f; }
 
+    public String Identity { get => $"{this.P[0].X},{this.P[0].Y} {this.P[1].X},{this.P[1].Y} {this.P[2].X},{this.P[2].Y}"; }
+
     ///
 
     public Triangle()
-        : this(0, 0, 0, 0, 0, 0, 0, 0, 0, new SDL_Color { r = 0xff, g = 0xff, b = 0xff, a = 0xff }) { }
+        : this(0, 0, 0, 0, 0, 0, 0, 0, 0, new SDL_Color { r = 0xff, g = 0xff, b = 0xff, a = 0x7f }) { }
 
     public Triangle(
         float x1,
@@ -253,7 +255,9 @@ public static partial class Program {
         // using var app = new GameEngine(1024, 960);
         // using var app = new GameEngine(384, 216);
         // using var app = new GameEngine(1536, 864);
+
         using var app = new GameEngine(1280, 832);
+        // using var app = new GameEngine(640, 416);
 
         app.Run();
 

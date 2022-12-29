@@ -60,8 +60,8 @@ public sealed class GameEngine: IDisposable {
 
         ///
 
+        this.WidthF = this.ScreenWidth * this.Scale;
         this.HeightF = this.ScreenHeight * this.Scale;
-        this.WidthF = this.ScreenHeight * this.Scale;
 
         ///
 
@@ -73,7 +73,9 @@ public sealed class GameEngine: IDisposable {
         ///
 
         var windowFlags = SDL_WindowFlags.SDL_WINDOW_SHOWN
-            | SDL_WindowFlags.SDL_WINDOW_ALLOW_HIGHDPI;        
+            | SDL_WindowFlags.SDL_WINDOW_ALLOW_HIGHDPI
+            | SDL_WindowFlags.SDL_WINDOW_ALWAYS_ON_TOP
+            ;
         
         this.SDLWindowPtr = SDL_CreateWindow(
             title: "game",
@@ -116,10 +118,17 @@ public sealed class GameEngine: IDisposable {
 
     private float fTheta { get; set; } = 0.0f;
 
+    private byte TriangleAlpha { get; set; } = 0xff;
+
     ///
 
-    private bool RenderWireframes { get; set; } = true;
-    // private bool RenderWireframes { get; set; } = false;
+    // private bool RenderWireframes { get; set; } = true;
+    private bool RenderWireframes { get; set; } = false;
+
+    ///
+
+    // private bool RenderClippedTriangles { get; set; } = true;
+    private bool RenderClippedTriangles { get; set; } = false;
 
     ///
 
@@ -168,6 +177,19 @@ public sealed class GameEngine: IDisposable {
 
                         break;
 
+                    case SDL_EventType.SDL_KEYUP when sdlEvent.key.keysym.scancode == SDL_Scancode.SDL_SCANCODE_R:
+
+                        
+                        
+
+                        WriteLine($"reload model");
+
+                        // this.Mesh = new Mesh(filename: "axis_culled.obj");
+                        // this.Mesh = new Mesh(filename: "axis.obj");
+                        this.Mesh = new Mesh(filename: "mountains.obj");
+
+                        break;
+
                     default:
 
                         break;
@@ -213,7 +235,9 @@ public sealed class GameEngine: IDisposable {
 
         // this.Mesh = new Mesh(filename: "VideoShip.obj");
         // this.Mesh = new Mesh(filename: "teapot.obj");
-        this.Mesh = new Mesh(filename: "axis.obj");
+        // this.Mesh = new Mesh(filename: "axis.obj");
+        // this.Mesh = new Mesh(filename: "axis_culled.obj");
+        this.Mesh = new Mesh(filename: "mountains.obj");
         
         this.MatProj = this.MatrixMakeProjection(
             90.0f, 
@@ -223,6 +247,13 @@ public sealed class GameEngine: IDisposable {
 
 
         // this.fTheta = 3.6f;
+
+
+        // this.vCamera = new Vec3D(x: -2.446756f, y: 0.832f, z: 2.2281225f, w: 1.0f);
+
+        // this.fYaw = -0.5260001f;
+
+        // this.fYaw = -0.46000004f;
 
         
 
@@ -244,6 +275,10 @@ public sealed class GameEngine: IDisposable {
 
     public void OnUpdate(
         float elapsedTime) {
+
+        var c1 = this.vCamera;
+
+        var f1 = this.fYaw;
 
         var keyboardState = this.GetKeyboardState();
 
@@ -289,12 +324,19 @@ public sealed class GameEngine: IDisposable {
             this.fYaw += 2.0f * elapsedTime;
         }
         
+        if (c1.X != this.vCamera.X
+            || c1.Y != this.vCamera.Y
+            || c1.Z != this.vCamera.Z
+            || c1.W != this.vCamera.W
+            || f1 != this.fYaw) {
+
+            WriteLine($"Camera coords: x: {this.vCamera.X}, y: {this.vCamera.Y}, z: {this.vCamera.Z}, w: {this.vCamera.W}; fYaw: {this.fYaw}");
+        }
+        
 
         ///
 
-        SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0x00, 0xff);
-
-        SDL_RenderClear(this.SDLRendererPtr);
+        
 
         // Uncomment to spin me right round baby right round
 
@@ -383,7 +425,8 @@ public sealed class GameEngine: IDisposable {
 
                     byte shade = Convert.ToByte(255.0f * dp);
 
-                    triTransformed.Color = new SDL_Color { r = shade, g = shade, b = shade, a = 0xff };
+                    // triTransformed.Color = new SDL_Color { r = shade, g = shade, b = shade, a = 0xff };
+                    triTransformed.Color = new SDL_Color { r = shade, g = shade, b = shade, a = this.TriangleAlpha };
 
                     // Convert World Space --> View space 
                     triViewed.P[0] = this.MatrixMultiplyVector(matView, triTransformed.P[0]);
@@ -443,8 +486,8 @@ public sealed class GameEngine: IDisposable {
                         triProjected.P[2].Y *= 0.5f * this.HeightF;
 
                         // Store triangle for sorting
-                        // vecTrianglesToRender.Add(new Triangle(triProjected.P[0], triProjected.P[1], triProjected.P[2], shade));
-                        vecTrianglesToRender.Add(triProjected);
+                        vecTrianglesToRender.Add(new Triangle(triProjected.P[0], triProjected.P[1], triProjected.P[2], triProjected.Color));
+                        // vecTrianglesToRender.Add(triProjected);
                     }
                 }
 
@@ -459,9 +502,22 @@ public sealed class GameEngine: IDisposable {
 
         var zeroTextCoord = new SDL_FPoint { };
 
+        ///
+
+        SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0x00, 0xff);
+
+        SDL_RenderClear(this.SDLRendererPtr);
+
         SDL_SetRenderDrawColor(this.SDLRendererPtr, 0xff, 0x00, 0x00, 0xff); // line color
 
+        if (this.TriangleAlpha != 0xff) {
+
+            SDL_SetRenderDrawBlendMode(this.SDLRendererPtr, SDL_BlendMode.SDL_BLENDMODE_BLEND);
+        }
+
         ///
+
+        // WriteLine($"vecTrianglesToRender.Count: {vecTrianglesToRender.Count}");
 
         foreach (var triToRaster in vecTrianglesToRender) {
 
@@ -472,6 +528,7 @@ public sealed class GameEngine: IDisposable {
 
             var listTriangles = new List<Triangle>();
 
+            // listTriangles.Add(new Triangle(triToRaster.P[0], triToRaster.P[1], triToRaster.P[2], triToRaster.Color));
             listTriangles.Add(triToRaster);
 
             var newTriangels = 1;
@@ -519,14 +576,19 @@ public sealed class GameEngine: IDisposable {
 
                     for (int w = 0; w < trisToAdd; w++) {
 
-                        listTriangles.Add(clipped[w]);
+                        // listTriangles.Add(clipped[w]);
+                        listTriangles.Add(new Triangle(clipped[w].P[0], clipped[w].P[1], clipped[w].P[2], clipped[w].Color));
                     }
                 }
 
                 newTriangels = listTriangles.Count;
             }
 
+            // WriteLine($"listTriangles.Count: {listTriangles.Count}");
+
             foreach (var ft in listTriangles) {
+
+                // WriteLine($"tri: {ft.P[0].X},{ft.P[0].Y} {ft.P[1].X},{ft.P[1].Y} {ft.P[2].X},{ft.P[2].Y}");
 
                 var p1 = new SDL_FPoint { x = ft.P[0].X, y = ft.P[0].Y };
                 var p2 = new SDL_FPoint { x = ft.P[1].X, y = ft.P[1].Y };
@@ -549,6 +611,13 @@ public sealed class GameEngine: IDisposable {
             }
              
 
+        }
+
+        // WriteLine();
+
+        if (this.TriangleAlpha != 0xff) {
+        
+            SDL_SetRenderDrawBlendMode(this.SDLRendererPtr, SDL_BlendMode.SDL_BLENDMODE_NONE);
         }
 
         SDL_RenderPresent(this.SDLRendererPtr);
@@ -764,13 +833,13 @@ public sealed class GameEngine: IDisposable {
         // Return signed shortest distance from point to plane, plane normal must be normalised
         Func<Vec3D, float> dist = (Vec3D p) => {
 
-            // var n = VectorNormalise(p);
-
-            // return (plane_n.X * p.X + plane_n.Y * p.Y + plane_n.Z * p.Z - VectorDotProduct(plane_n, plane_p));
-
             var n = VectorNormalise(p);
 
-            return (plane_n.X * n.X + plane_n.Y * n.Y + plane_n.Z * n.Z - VectorDotProduct(plane_n, plane_p));
+            return (plane_n.X * p.X + plane_n.Y * p.Y + plane_n.Z * p.Z - VectorDotProduct(plane_n, plane_p));
+
+            // var n = VectorNormalise(p);
+
+            // return (plane_n.X * n.X + plane_n.Y * n.Y + plane_n.Z * n.Z - VectorDotProduct(plane_n, plane_p));
         };
 
         // Create two temporary storage arrays to classify points either side of plane
@@ -841,8 +910,10 @@ public sealed class GameEngine: IDisposable {
             // the plane, the triangle simply becomes a smaller triangle
 
             // Copy appearance info to new triangle
-            // out_tri1.Color = in_tri.Color;
-            out_tri1.Color = new SDL_Color { r = 0x00, g = 0x00, b = 0xff, a = 0xff };
+            
+            out_tri1.Color = this.RenderClippedTriangles
+                ? new SDL_Color { r = 0x00, g = 0x00, b = 0xff, a = this.TriangleAlpha }
+                : in_tri.Color;
 
             // The inside point is valid, so keep that...
             out_tri1.P[0] = insidePoints[0];
@@ -862,11 +933,13 @@ public sealed class GameEngine: IDisposable {
             // represent a quad with two new triangles
 
             // Copy appearance info to new triangles
-            // out_tri1.Color = in_tri.Color;
-            out_tri1.Color = new SDL_Color { r = 0x00, g = 0xff, b = 0x00, a = 0xff }; 
+            out_tri1.Color = this.RenderClippedTriangles
+                ? new SDL_Color { r = 0x00, g = 0xff, b = 0x00, a = this.TriangleAlpha }
+                : in_tri.Color;
 
-            // out_tri2.Color = in_tri.Color;
-            out_tri2.Color = new SDL_Color { r = 0xff, g = 0x00, b = 0x00, a = 0xff };
+            out_tri2.Color = this.RenderClippedTriangles
+                ? new SDL_Color { r = 0xff, g = 0x00, b = 0x00, a = this.TriangleAlpha }
+                : in_tri.Color;
 
             // The first triangle consists of the two inside points and a new
             // point determined by the location where one side of the triangle
