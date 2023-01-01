@@ -41,7 +41,9 @@ public sealed class GameEngine: IDisposable {
 
     private IntPtr SDLRendererPtr { get; init; }
 
-    private IntPtr Texture { get; init; }
+    // private IntPtr Texture { get; init; }
+    
+    private IntPtr Surface { get; init; }
 
     ///
 
@@ -101,18 +103,26 @@ public sealed class GameEngine: IDisposable {
 
         ///
 
-        var img = SDL_LoadBMP("./mario.bmp");
+        this.Surface = SDL_LoadBMP("./mario.bmp");
 
-        if (img == IntPtr.Zero) {
+        if (this.Surface == IntPtr.Zero) {
 
             throw new Exception();
         }
 
-        this.Texture = SDL_CreateTextureFromSurface(this.SDLRendererPtr, img);
+        // this.Texture = SDL_CreateTextureFromSurface(this.SDLRendererPtr, img);
 
-        SDL_FreeSurface(img);
+        // SDL_FreeSurface(img);
 
-        // this.OnUpdate(0);
+        ///
+
+        
+
+        ///
+
+        this.DepthBufferSize = Convert.ToInt32(this.WidthF * this.HeightF);
+
+        this.DepthBuffer = new float[this.DepthBufferSize];
     }
 
     private Mesh? Mesh { get; set; }
@@ -215,8 +225,13 @@ public sealed class GameEngine: IDisposable {
         }
     }
 
+    public float[] DepthBuffer { get; set; }
+
+    public int DepthBufferSize { get; set; }
 
     public bool OnCreate() {
+
+        
 
         // this.MeshCube = new Mesh(
         //     new Triangle[] {
@@ -297,8 +312,12 @@ public sealed class GameEngine: IDisposable {
 
         // this.fYaw = -0.46000004f;
 
-        this.vCamera = new Vec3D(x: 0.0f, y: 0.79999995f, z: 4.5040007f, w: 1.0f);
-        this.fYaw = 0;
+        // this.vCamera = new Vec3D(x: 0.0f, y: 0.79999995f, z: 4.5040007f, w: 1.0f);
+        // this.fYaw = 0;
+
+
+        this.vCamera = new Vec3D(x: -0.6355761f, y: 0.51999986f, z: 4.3227425f, w: 1.0f);
+        this.fYaw = -0.868f;
 
         return true;
     }
@@ -594,8 +613,16 @@ public sealed class GameEngine: IDisposable {
 
         ///
 
+        for (var i = 0; i < this.DepthBufferSize; i++) {
+
+			this.DepthBuffer[i] = 0.0f;
+        }
+
+        ///
+
         // WriteLine($"vecTrianglesToRender.Count: {vecTrianglesToRender.Count}");
 
+        // Loop through all transformed, viewed, projected, and sorted triangles
         foreach (var triToRaster in vecTrianglesToRender) {
 
             var clipped = new [] {
@@ -674,36 +701,53 @@ public sealed class GameEngine: IDisposable {
 
             // WriteLine($"listTriangles.Count: {listTriangles.Count}");
 
+            // foreach (var ft in listTriangles) {
+
+            //     // WriteLine($"tri: {ft.P[0].X},{ft.P[0].Y} {ft.P[1].X},{ft.P[1].Y} {ft.P[2].X},{ft.P[2].Y}");
+
+            //     var p1 = new SDL_FPoint { x = ft.P[0].X, y = ft.P[0].Y };
+            //     var p2 = new SDL_FPoint { x = ft.P[1].X, y = ft.P[1].Y };
+            //     var p3 = new SDL_FPoint { x = ft.P[2].X, y = ft.P[2].Y };
+
+            //     // var c = new SDL_Color { r = 0x00, g = 0x00, b = 0x00, a = 0x00 };
+
+            //     var verts = new [] {
+            //         new SDL_Vertex { position = p1, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[0].U / ft.T[0].W, y = ft.T[0].V / ft.T[0].W } },
+            //         new SDL_Vertex { position = p2, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[1].U / ft.T[1].W, y = ft.T[1].V / ft.T[1].W } },
+            //         new SDL_Vertex { position = p3, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[2].U / ft.T[2].W, y = ft.T[2].V / ft.T[2].W } }
+            //     };
+
+            //     // var verts = new [] {
+            //     //     new SDL_Vertex { position = p1, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[0].U, y = ft.T[0].V } },
+            //     //     new SDL_Vertex { position = p2, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[1].U, y = ft.T[1].V } },
+            //     //     new SDL_Vertex { position = p3, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[2].U, y = ft.T[2].V } }
+            //     // };
+
+            //     // SDL_RenderGeometry(this.SDLRendererPtr, IntPtr.Zero, verts, 3, null, 0);
+            //     SDL_RenderGeometry(this.SDLRendererPtr, this.Texture, verts, 3, null, 0);
+
+            //     if (this.RenderWireframes) {
+
+            //         SDL_RenderDrawLineF(this.SDLRendererPtr, p1.x, p1.y, p2.x, p2.y);
+            //         SDL_RenderDrawLineF(this.SDLRendererPtr, p2.x, p2.y, p3.x, p3.y);
+            //         SDL_RenderDrawLineF(this.SDLRendererPtr, p3.x, p3.y, p1.x, p1.y);
+            //     }
+            // }
+
             foreach (var ft in listTriangles) {
 
-                // WriteLine($"tri: {ft.P[0].X},{ft.P[0].Y} {ft.P[1].X},{ft.P[1].Y} {ft.P[2].X},{ft.P[2].Y}");
-
-                var p1 = new SDL_FPoint { x = ft.P[0].X, y = ft.P[0].Y };
-                var p2 = new SDL_FPoint { x = ft.P[1].X, y = ft.P[1].Y };
-                var p3 = new SDL_FPoint { x = ft.P[2].X, y = ft.P[2].Y };
-
-                // var c = new SDL_Color { r = 0x00, g = 0x00, b = 0x00, a = 0x00 };
-
-                var verts = new [] {
-                    new SDL_Vertex { position = p1, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[0].U / ft.T[0].W, y = ft.T[0].V / ft.T[0].W } },
-                    new SDL_Vertex { position = p2, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[1].U / ft.T[1].W, y = ft.T[1].V / ft.T[1].W } },
-                    new SDL_Vertex { position = p3, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[2].U / ft.T[2].W, y = ft.T[2].V / ft.T[2].W } }
-                };
-
-                // var verts = new [] {
-                //     new SDL_Vertex { position = p1, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[0].U, y = ft.T[0].V } },
-                //     new SDL_Vertex { position = p2, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[1].U, y = ft.T[1].V } },
-                //     new SDL_Vertex { position = p3, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[2].U, y = ft.T[2].V } }
-                // };
-
-                // SDL_RenderGeometry(this.SDLRendererPtr, IntPtr.Zero, verts, 3, null, 0);
-                SDL_RenderGeometry(this.SDLRendererPtr, this.Texture, verts, 3, null, 0);
+                DrawTexturedTriangle(
+                    Convert.ToInt32(ft.P[0].X), Convert.ToInt32(ft.P[0].Y), ft.T[0].U, ft.T[0].V, ft.T[0].W,
+					Convert.ToInt32(ft.P[1].X), Convert.ToInt32(ft.P[1].Y), ft.T[1].U, ft.T[1].V, ft.T[1].W,
+					Convert.ToInt32(ft.P[2].X), Convert.ToInt32(ft.P[2].Y), ft.T[2].U, ft.T[2].V, ft.T[2].W, 
+                    this.Surface);
+                    // this.Texture);
 
                 if (this.RenderWireframes) {
 
-                    SDL_RenderDrawLineF(this.SDLRendererPtr, p1.x, p1.y, p2.x, p2.y);
-                    SDL_RenderDrawLineF(this.SDLRendererPtr, p2.x, p2.y, p3.x, p3.y);
-                    SDL_RenderDrawLineF(this.SDLRendererPtr, p3.x, p3.y, p1.x, p1.y);
+                    SDL_RenderDrawLineF(this.SDLRendererPtr, ft.P[0].X, ft.P[0].Y, ft.P[1].X, ft.P[1].Y);
+                    SDL_RenderDrawLineF(this.SDLRendererPtr, ft.P[1].X, ft.P[1].Y, ft.P[2].X, ft.P[2].Y);
+                    SDL_RenderDrawLineF(this.SDLRendererPtr, ft.P[2].X, ft.P[2].Y, ft.P[0].X, ft.P[0].Y);
                 }
             }
              
@@ -724,6 +768,609 @@ public sealed class GameEngine: IDisposable {
         var t = $"GameEngine - fps: {MathF.Round(1.0f / elapsedTime, 0).ToString("F1")}, theta: {MathF.Round(this.fTheta, 2).ToString("F2")}";
 
         SDL_SetWindowTitle(this.SDLWindowPtr, t);
+    }
+
+    ///
+
+    // public void DrawTexturedTriangle(
+    //     int x1, int y1, float u1, float v1, float w1,
+    //     int x2, int y2, float u2, float v2, float w2,
+    //     int x3, int y3, float u3, float v3, float w3,
+    //     // IntPtr texture
+    //     IntPtr surface
+    //     ) {
+
+    //     var screenWidth = Convert.ToInt32(this.WidthF);
+
+    //     ///
+
+    //     if (y2 < y1) {
+
+    //         var _y1 = y1;
+    //         y1 = y2;
+    //         y2 = _y1;
+
+    //         var _x1 = x1;
+    //         x1 = x2;
+    //         x2 = _x1;
+
+    //         var _u1 = u1;
+    //         u1 = u2;
+    //         u2 = _u1;
+
+    //         var _v1 = v1;
+    //         v1 = v2;
+    //         v2 = _v1;
+
+    //         var _w1 = w1;
+    //         w1 = w2;
+    //         w2 = _w1;
+    //     }
+
+    //     if (y3 > y1) {
+
+    //         var _y1 = y1;
+    //         y1 = y3;
+    //         y3 = _y1;
+
+    //         var _x1 = x1;
+    //         x1 = x3;
+    //         x3 = _x1;
+
+    //         var _u1 = u1;
+    //         u1 = u3;
+    //         u3 = _u1;
+
+    //         var _v1 = v1;
+    //         v1 = v3;
+    //         v3 = _v1;
+
+    //         var _w1 = w1;
+    //         w1 = w3;
+    //         w3 = _w1;
+    //     }
+
+    //     if (y3 < y2) {
+
+    //         var _y2 = y2;
+    //         y2 = y3;
+    //         y3 = _y2;
+
+    //         var _x2 = x2;
+    //         x2 = x3;
+    //         x3 = _x2;
+
+    //         var _u2 = u2;
+    //         u2 = u3;
+    //         u3 = _u2;
+
+    //         var _v2 = v2;
+    //         v2 = v3;
+    //         v3 = _v2;
+
+    //         var _w2 = w2;
+    //         w2 = w3;
+    //         w3 = _w2;
+    //     }
+
+	// 	int dy1 = y2 - y1;
+	// 	int dx1 = x2 - x1;
+	// 	float dv1 = v2 - v1;
+	// 	float du1 = u2 - u1;
+	// 	float dw1 = w2 - w1;
+
+	// 	int dy2 = y3 - y1;
+	// 	int dx2 = x3 - x1;
+	// 	float dv2 = v3 - v1;
+	// 	float du2 = u3 - u1;
+	// 	float dw2 = w3 - w1;
+
+	// 	float tex_u = 0; 
+    //     float tex_v = 0;
+    //     float tex_w = 0;
+
+	// 	float dax_step = 0;
+    //     float dbx_step = 0;
+    //     float du1_step = 0; 
+    //     float dv1_step = 0;
+    //     float du2_step = 0; 
+    //     float dv2_step = 0;
+    //     float dw1_step = 0; 
+    //     float dw2_step = 0;
+    
+	// 	if (dy1 != 0) { dax_step = dx1 / MathF.Abs(dy1); }
+	// 	if (dy2 != 0) { dbx_step = dx2 / MathF.Abs(dy2); }
+
+	// 	if (dy1 != 0) { du1_step = du1 / MathF.Abs(dy1); }
+	// 	if (dy1 != 0) { dv1_step = dv1 / MathF.Abs(dy1); }
+	// 	if (dy1 != 0) { dw1_step = dw1 / MathF.Abs(dy1); }
+
+	// 	if (dy2 != 0) { du2_step = du2 / MathF.Abs(dy2); }
+	// 	if (dy2 != 0) { dv2_step = dv2 / MathF.Abs(dy2); }
+	// 	if (dy2 != 0) { dw2_step = dw2 / MathF.Abs(dy2); }
+
+    //     ///
+
+    //     // uint texFormat = 0;
+    //     // int texAccess = 0;
+    //     // int texWidth = 0;
+    //     // int texHeight = 0;
+
+    //     // SDL_QueryTexture(texture, out texFormat, out texAccess, out texWidth, out texHeight);
+
+    //     // ///
+
+    //     // ///
+
+    //     // var pixelsPtr = IntPtr.Zero;
+
+    //     // int pitch = 0;
+
+    //     // SDL_LockTexture(texture, IntPtr.Zero, out pixelsPtr, out pitch);
+
+    //     ///
+
+    //     unsafe {
+
+    //         var pixels = (UInt32 *) surface;
+
+    //         // var texWidth = 300;
+
+    //         // var pixels = (UInt32 *) pixelsPtr;
+
+    //         if (dy1 != 0) {
+
+    //             for (int i = y1; i <= y2; i++) {
+
+    //                 int ax = Convert.ToInt32(Convert.ToSingle(x1) + Convert.ToSingle(i - y1) * dax_step);
+    //                 int bx = Convert.ToInt32(Convert.ToSingle(x1) + Convert.ToSingle(i - y1) * dbx_step);
+
+    //                 float tex_su = u1 + (float)(i - y1) * du1_step;
+    //                 float tex_sv = v1 + (float)(i - y1) * dv1_step;
+    //                 float tex_sw = w1 + (float)(i - y1) * dw1_step;
+
+    //                 float tex_eu = u1 + (float)(i - y1) * du2_step;
+    //                 float tex_ev = v1 + (float)(i - y1) * dv2_step;
+    //                 float tex_ew = w1 + (float)(i - y1) * dw2_step;
+
+    //                 if (ax > bx) {
+
+    //                     var _ax = ax;
+    //                     ax = bx;
+    //                     bx = _ax;
+
+    //                     var _tex_su = tex_su;
+    //                     tex_su = tex_eu;
+    //                     tex_eu = _tex_su;
+
+    //                     var _tex_sv = tex_sv;
+    //                     tex_sv = tex_ev;
+    //                     tex_ev = _tex_sv;
+
+    //                     var _tex_sw = tex_sw;
+    //                     tex_sw = tex_ew;
+    //                     tex_ew = _tex_sw;
+    //                 }
+                    
+    //                 tex_u = tex_su;
+    //                 tex_v = tex_sv;
+    //                 tex_w = tex_sw;
+
+    //                 float tstep = 1.0f / ((float)(bx - ax));
+    //                 float t = 0.0f;
+
+    //                 for (int j = Convert.ToInt32(ax); j < bx; j++) {
+
+    //                     tex_u = (1.0f - t) * tex_su + t * tex_eu;
+    //                     tex_v = (1.0f - t) * tex_sv + t * tex_ev;
+    //                     tex_w = (1.0f - t) * tex_sw + t * tex_ew;
+
+    //                     if (tex_w > this.DepthBuffer[i * screenWidth + j]) {
+
+    //                         // var sampledColor = pixels[Convert.ToInt32(Convert.ToSingle(texWidth) * tex_v / tex_w) * texWidth + Convert.ToInt32(Convert.ToSingle(texWidth) * tex_u / tex_w)];
+
+    //                         // var v = Convert.ToInt32(MathF.Min(300.0f, MathF.Max(0, tex_v / tex_w)));
+
+    //                         // var y = Convert.ToInt32(Convert.ToSingle(texWidth) * v);
+
+    //                         // var u = Convert.ToInt32(MathF.Min(300.0f, MathF.Max(0, tex_u / tex_w)));
+
+    //                         // WriteLine($"u: {u}, v: {v}");
+
+    //                         // var x = Convert.ToInt32(Convert.ToSingle(texWidth) * u);
+
+
+    //                         var u = Math.Max(0.0, Math.Min(1.0, tex_u / tex_w));
+
+    //                         var v = Math.Max(0.0, Math.Min(1.0, tex_v / tex_w));
+
+    //                         var x = Convert.ToInt32(300.0f * u);
+
+    //                         var y = Convert.ToInt32(300.0f * v);
+
+
+    //                         // var sampledColor = pixels[y * texWidth + x];
+
+    //                         // var r = (byte) (sampledColor >> 24);
+    //                         // var g = (byte) (sampledColor >> 16);
+    //                         // var b = (byte) (sampledColor >> 8);
+    //                         // var a = (byte) (sampledColor);
+
+    //                         byte r = 0x00;
+    //                         byte g = 0x00;
+    //                         byte b = 0xff;
+    //                         byte a = 0xff;
+
+    //                         SDL_SetRenderDrawColor(this.SDLRendererPtr, r, g, b, a);
+
+    //                         SDL_RenderDrawPoint(this.SDLRendererPtr, j, i);
+
+    //                         this.DepthBuffer[i * screenWidth + j] = tex_w;
+    //                     }
+
+
+    //                     t += tstep;
+    //                 }
+    //             }
+    //         }
+        
+    //         dy1 = y3 - y2;
+    //         dx1 = x3 - x2;
+    //         dv1 = v3 - v2;
+    //         du1 = u3 - u2;
+    //         dw1 = w3 - w2;
+
+    //         if (dy1 != 0) { dax_step = dx1 / MathF.Abs(dy1); }
+    //         if (dy2 != 0) { dbx_step = dx2 / MathF.Abs(dy2); }
+
+    //         du1_step = 0; dv1_step = 0;
+    //         if (dy1 != 0) { du1_step = du1 / MathF.Abs(dy1); }
+    //         if (dy1 != 0) { dv1_step = dv1 / MathF.Abs(dy1); }
+    //         if (dy1 != 0) { dw1_step = dw1 / MathF.Abs(dy1); }
+
+    //         if (dy1 != 0) {
+
+    //             for (int i = y2; i <= y3; i++) {
+
+    //                 int ax = Convert.ToInt32(Convert.ToSingle(x2) + Convert.ToSingle(i - y2) * dax_step);
+    //                 int bx = Convert.ToInt32(Convert.ToSingle(x1) + Convert.ToSingle(i - y1) * dbx_step);
+
+    //                 float tex_su = u2 + (float)(i - y2) * du1_step;
+    //                 float tex_sv = v2 + (float)(i - y2) * dv1_step;
+    //                 float tex_sw = w2 + (float)(i - y2) * dw1_step;
+
+    //                 float tex_eu = u1 + (float)(i - y1) * du2_step;
+    //                 float tex_ev = v1 + (float)(i - y1) * dv2_step;
+    //                 float tex_ew = w1 + (float)(i - y1) * dw2_step;
+
+    //                 if (ax > bx) {
+
+    //                     var _ax = ax;
+    //                     ax = bx;
+    //                     bx = _ax;
+
+    //                     var _tex_su = tex_su;
+    //                     tex_su = tex_eu;
+    //                     tex_eu = _tex_su;
+
+    //                     var _tex_sv = tex_sv;
+    //                     tex_sv = tex_ev;
+    //                     tex_ev = _tex_sv;
+
+    //                     var _tex_sw = tex_sw;
+    //                     tex_sw = tex_ew;
+    //                     tex_ew = _tex_sw;
+    //                 }
+                    
+    //                 tex_u = tex_su;
+    //                 tex_v = tex_sv;
+    //                 tex_w = tex_sw;
+
+    //                 float tstep = 1.0f / Convert.ToSingle(bx - ax);
+    //                 float t = 0.0f;
+
+    //                 for (int j = ax; j < bx; j++) {
+
+    //                     tex_u = (1.0f - t) * tex_su + t * tex_eu;
+    //                     tex_v = (1.0f - t) * tex_sv + t * tex_ev;
+    //                     tex_w = (1.0f - t) * tex_sw + t * tex_ew;
+
+    //                     if (tex_w > this.DepthBuffer[i * screenWidth + j]) {
+
+    //                         // var v = Convert.ToInt32(MathF.Min(300.0f, MathF.Max(0, tex_v / tex_w)));
+
+    //                         // // var y = Convert.ToInt32(Convert.ToSingle(texWidth) * v);
+
+    //                         // var u = Convert.ToInt32(MathF.Min(300.0f, MathF.Max(0, tex_u / tex_w)));
+
+
+    //                         var u = Math.Max(0.0, Math.Min(1.0, tex_u / tex_w));
+
+    //                         var v = Math.Max(0.0, Math.Min(1.0, tex_v / tex_w));
+
+    //                         var x = Convert.ToInt32(300.0f * u);
+
+    //                         var y = Convert.ToInt32(300.0f * v);
+
+                            
+
+    //                         // // var y = Convert.ToInt32(Convert.ToSingle(texWidth) * v);
+
+
+    //                         // WriteLine($"u: {u}, v: {v}");
+    //                         // WriteLine($"x: {x}, y: {y}");
+
+    //                         // var x = Convert.ToInt32(Convert.ToSingle(texWidth) * u);
+
+    //                         // var sampledColor = pixels[y * texWidth + x];
+
+    //                         // var r = Convert.ToByte(sampledColor >> 24);
+    //                         // var g = Convert.ToByte(sampledColor >> 16);
+    //                         // var b = Convert.ToByte(sampledColor >> 8);
+    //                         // var a = Convert.ToByte(sampledColor);
+
+
+    //                         // var r = (byte) (sampledColor >> 24);
+    //                         // var g = (byte) (sampledColor >> 16);
+    //                         // var b = (byte) (sampledColor >> 8);
+    //                         // var a = (byte) (sampledColor);
+
+    //                         byte r = 0x00;
+    //                         byte g = 0x00;
+    //                         byte b = 0xff;
+    //                         byte a = 0xff;
+
+    //                         SDL_SetRenderDrawColor(this.SDLRendererPtr, r, g, b, a);
+
+    //                         SDL_RenderDrawPoint(this.SDLRendererPtr, j, i);
+
+    //                         this.DepthBuffer[i * screenWidth + j] = tex_w;
+    //                     }
+
+    //                     t += tstep;
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     // SDL_UnlockTexture(texture);
+    // }
+
+
+    public void DrawTexturedTriangle(
+        int x1, int y1, float u1, float v1, float w1,
+        int x2, int y2, float u2, float v2, float w2,
+        int x3, int y3, float u3, float v3, float w3,
+        // IntPtr texture
+        IntPtr surface) {
+ 
+        if (y2 < y1) {
+
+            var _y1 = y1;
+            y1 = y2;
+            y2 = _y1;
+
+            var _x1 = x1;
+            x1 = x2;
+            x2 = _x1;
+
+            var _u1 = u1;
+            u1 = u2;
+            u2 = _u1;
+
+            var _v1 = v1;
+            v1 = v2;
+            v2 = _v1;
+
+            var _w1 = w1;
+            w1 = w2;
+            w2 = _w1;
+        }
+
+        if (y3 > y1) {
+
+            var _y1 = y1;
+            y1 = y3;
+            y3 = _y1;
+
+            var _x1 = x1;
+            x1 = x3;
+            x3 = _x1;
+
+            var _u1 = u1;
+            u1 = u3;
+            u3 = _u1;
+
+            var _v1 = v1;
+            v1 = v3;
+            v3 = _v1;
+
+            var _w1 = w1;
+            w1 = w3;
+            w3 = _w1;
+        }
+
+        if (y3 < y2) {
+
+            var _y2 = y2;
+            y2 = y3;
+            y3 = _y2;
+
+            var _x2 = x2;
+            x2 = x3;
+            x3 = _x2;
+
+            var _u2 = u2;
+            u2 = u3;
+            u3 = _u2;
+
+            var _v2 = v2;
+            v2 = v3;
+            v3 = _v2;
+
+            var _w2 = w2;
+            w2 = w3;
+            w3 = _w2;
+        }
+
+		int dy1 = y2 - y1;
+		int dx1 = x2 - x1;
+		float dv1 = v2 - v1;
+		float du1 = u2 - u1;
+		float dw1 = w2 - w1;
+
+		int dy2 = y3 - y1;
+		int dx2 = x3 - x1;
+		float dv2 = v3 - v1;
+		float du2 = u3 - u1;
+		float dw2 = w3 - w1;
+
+		float tex_u = 0.0f;
+        float tex_v = 0.0f;
+        float tex_w = 0.0f;
+
+        
+		float dax_step = 0, dbx_step = 0,
+			du1_step = 0, dv1_step = 0,
+			du2_step = 0, dv2_step = 0,
+			dw1_step=0, dw2_step=0;
+
+		if (dy1 != 0) { dax_step = dx1 / MathF.Abs(dy1); }
+		if (dy2 != 0) { dbx_step = dx2 / MathF.Abs(dy2); }
+
+		if (dy1 != 0) { du1_step = du1 / MathF.Abs(dy1); }
+		if (dy1 != 0) { dv1_step = dv1 / MathF.Abs(dy1); }
+		if (dy1 != 0) { dw1_step = dw1 / MathF.Abs(dy1); }
+
+		if (dy2 != 0) { du2_step = du2 / MathF.Abs(dy2); }
+		if (dy2 != 0) { dv2_step = dv2 / MathF.Abs(dy2); }
+		if (dy2 != 0) { dw2_step = dw2 / MathF.Abs(dy2); }
+
+		if (dy1 != 0) {
+
+			for (int i = y1; i <= y2; i++) {
+
+                var ax = Convert.ToInt32(((float) x1) + (i - y1) * dax_step);
+                var bx = Convert.ToInt32(((float) x1) + (i - y1) * dbx_step);
+
+				float tex_su = u1 + (float)(i - y1) * du1_step;
+				float tex_sv = v1 + (float)(i - y1) * dv1_step;
+				float tex_sw = w1 + (float)(i - y1) * dw1_step;
+
+				float tex_eu = u1 + (float)(i - y1) * du2_step;
+				float tex_ev = v1 + (float)(i - y1) * dv2_step;
+				float tex_ew = w1 + (float)(i - y1) * dw2_step;
+
+                if (ax > bx) {
+
+                    var _ax = ax;
+                    ax = bx;
+                    bx = _ax;
+
+                    var _tex_su = tex_su;
+                    tex_su = tex_eu;
+                    tex_eu = _tex_su;
+
+                    var _tex_sv = tex_sv;
+                    tex_sv = tex_ev;
+                    tex_ev = _tex_sv;
+
+                    var _tex_sw = tex_sw;
+                    tex_sw = tex_ew;
+                    tex_ew = _tex_sw;
+                }
+                
+				tex_u = tex_su;
+				tex_v = tex_sv;
+				tex_w = tex_sw;
+
+				float tstep = 1.0f / ((float)(bx - ax));
+				float t = 0.0f;
+
+				for (int j = ax; j < bx; j++) {
+
+					tex_u = (1.0f - t) * tex_su + t * tex_eu;
+					tex_v = (1.0f - t) * tex_sv + t * tex_ev;
+					tex_w = (1.0f - t) * tex_sw + t * tex_ew;
+
+                    SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0xff, 0xff);
+
+                    SDL_RenderDrawPoint(this.SDLRendererPtr, j, i);
+					
+					t += tstep;
+				}
+            }
+        }
+        
+		dy1 = y3 - y2;
+		dx1 = x3 - x2;
+		dv1 = v3 - v2;
+		du1 = u3 - u2;
+		dw1 = w3 - w2;
+
+		if (dy1 != 0) { dax_step = dx1 / MathF.Abs(dy1); }
+		if (dy2 != 0) { dbx_step = dx2 / MathF.Abs(dy2); }
+
+		du1_step = 0; dv1_step = 0;
+		if (dy1 != 0) { du1_step = du1 / MathF.Abs(dy1); }
+		if (dy1 != 0) { dv1_step = dv1 / MathF.Abs(dy1); }
+		if (dy1 != 0) { dw1_step = dw1 / MathF.Abs(dy1); }
+
+        if (dy1 != 0) {
+
+            for (int i = y2; i <= y3; i++) {
+
+                int ax = Convert.ToInt32(Convert.ToSingle(x2) + (i - y2) * dax_step);
+                int bx = Convert.ToInt32(Convert.ToSingle(x1) + (i - y1) * dbx_step);
+
+				float tex_su = u2 + (float)(i - y2) * du1_step;
+				float tex_sv = v2 + (float)(i - y2) * dv1_step;
+				float tex_sw = w2 + (float)(i - y2) * dw1_step;
+
+				float tex_eu = u1 + (float)(i - y1) * du2_step;
+				float tex_ev = v1 + (float)(i - y1) * dv2_step;
+				float tex_ew = w1 + (float)(i - y1) * dw2_step;
+
+                if (ax > bx) {
+
+                    var _ax = ax;
+                    ax = bx;
+                    bx = _ax;
+
+                    var _tex_su = tex_su;
+                    tex_su = tex_eu;
+                    tex_eu = _tex_su;
+
+                    var _tex_sv = tex_sv;
+                    tex_sv = tex_ev;
+                    tex_ev = _tex_sv;
+
+                    var _tex_sw = tex_sw;
+                    tex_sw = tex_ew;
+                    tex_ew = _tex_sw;
+                }
+                
+				tex_u = tex_su;
+				tex_v = tex_sv;
+				tex_w = tex_sw;
+
+				float tstep = 1.0f / ((float)(bx - ax));
+				float t = 0.0f;
+
+				for (int j = ax; j < bx; j++) {
+
+					tex_u = (1.0f - t) * tex_su + t * tex_eu;
+					tex_v = (1.0f - t) * tex_sv + t * tex_ev;
+					tex_w = (1.0f - t) * tex_sw + t * tex_ew;
+
+                    SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0xff, 0xff);
+
+                    SDL_RenderDrawPoint(this.SDLRendererPtr, j, i);
+					
+					t += tstep;
+				}
+            }
+        }
     }
 
     ///
@@ -1009,7 +1656,17 @@ public sealed class GameEngine: IDisposable {
 
             // All points lie on the inside of plane, so do nothing
             // and allow the triangle to simply pass through
-            out_tri1 = in_tri;
+            // out_tri1 = in_tri;
+            out_tri1 = new Triangle(
+                in_tri.P[0], 
+                in_tri.P[1], 
+                in_tri.P[2],
+                
+                in_tri.T[0],
+                in_tri.T[1],
+                in_tri.T[2],
+
+                in_tri.Color);
 
             return 1; // Just the one returned original triangle is valid
         }
@@ -1092,7 +1749,9 @@ public sealed class GameEngine: IDisposable {
 
     public void Dispose() {
 
-        SDL_DestroyTexture(this.Texture);
+        // SDL_DestroyTexture(this.Texture);
+
+        SDL_FreeSurface(this.Surface);
 
         SDL_DestroyRenderer(this.SDLRendererPtr);
 

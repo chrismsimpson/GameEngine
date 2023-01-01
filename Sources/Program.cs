@@ -115,14 +115,14 @@ public struct Triangle {
             new Vec3D(x3, y3, z3)
         };
 
-        this.Color = color;
-
         this.T = new Vec2D[] {
 
             new Vec2D(),
             new Vec2D(),
             new Vec2D()
         };
+
+        this.Color = color;
     }    
 
     ///
