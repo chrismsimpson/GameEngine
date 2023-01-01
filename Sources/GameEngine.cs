@@ -297,7 +297,8 @@ public sealed class GameEngine: IDisposable {
 
         // this.fYaw = -0.46000004f;
 
-        
+        this.vCamera = new Vec3D(x: 0.0f, y: 0.79999995f, z: 4.5040007f, w: 1.0f);
+        this.fYaw = 0;
 
         return true;
     }
