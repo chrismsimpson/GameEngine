@@ -7,21 +7,25 @@ public struct Vec2D {
     
     public float V { get; set; }
 
-    public float W { get; set; }
+    // public float W { get; set; }
 
     ///
 
     public Vec2D()
-        : this(0, 0, 0) { }
+        : this(0, 0
+        // , 0
+        ) { }
 
     public Vec2D(
         float u,
-        float v,
-        float w) {
+        float v
+        // ,
+        // float w
+        ) {
 
         this.U = u;
         this.V = v;
-        this.W = w;
+        // this.W = w;
     }
 }
 
@@ -203,16 +207,19 @@ public struct Triangle {
         
         float u1,
         float v1,
-        float tw1,
+        // float tw1,
 
         float u2,
         float v2,
-        float tw2,
+        // float tw2,
 
         float u3,
-        float v3,
-        float tw3)
-        : this(x1, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, u1, v1, tw1, u2, v2, tw2, u3, v3, tw3, new SDL_Color { r = 0xff, g = 0xff, b = 0xff, a = 0xff }) { }
+        float v3
+        // ,
+        // float tw3
+        )
+        // : this(x1, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, u1, v1, tw1, u2, v2, tw2, u3, v3, tw3, new SDL_Color { r = 0xff, g = 0xff, b = 0xff, a = 0xff }) { }
+        : this(x1, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, u1, v1, u2, v2, u3, v3, new SDL_Color { r = 0xff, g = 0xff, b = 0xff, a = 0xff }) { }
 
     public Triangle(
         float x1,
@@ -232,15 +239,15 @@ public struct Triangle {
 
         float u1,
         float v1,
-        float tw1,
+        // float tw1,
 
         float u2,
         float v2,
-        float tw2,
+        // float tw2,
 
         float u3,
         float v3,
-        float tw3,
+        // float tw3,
         
         SDL_Color color) {
 
@@ -253,9 +260,13 @@ public struct Triangle {
 
         this.T = new Vec2D[] {
 
-            new Vec2D(u1, v1, tw1),
-            new Vec2D(u2, v2, tw2),
-            new Vec2D(u3, v3, tw3)
+            // new Vec2D(u1, v1, tw1),
+            // new Vec2D(u2, v2, tw2),
+            // new Vec2D(u3, v3, tw3)
+            
+            new Vec2D(u1, v1),
+            new Vec2D(u2, v2),
+            new Vec2D(u3, v3)
         };
 
         this.Color = color;

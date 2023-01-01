@@ -253,32 +253,62 @@ public sealed class GameEngine: IDisposable {
         // this.Mesh = new Mesh(filename: "mountains.obj");
 
 
+        // this.Mesh = new Mesh(
+        //     new Triangle[] {
+                
+        //         // SOUTH
+        //         new Triangle(0.0f, 0.0f, 0.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+        //         new Triangle(0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+
+        //         // EAST                                                      
+        //         new Triangle(1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+        //         new Triangle(1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+
+        //         // NORTH                                                     
+        //         new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+        //         new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+
+        //         // WEST                                                      
+        //         new Triangle(0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+        //         new Triangle(0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+
+        //         // TOP                                                       
+        //         new Triangle(0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+        //         new Triangle(0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+
+        //         // BOTTOM                                                    
+        //         new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+        //         new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+        //     });
+
+
+
         this.Mesh = new Mesh(
             new Triangle[] {
                 
                 // SOUTH
-                new Triangle(0.0f, 0.0f, 0.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
-                new Triangle(0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+                new Triangle(0.0f, 0.0f, 0.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f,     0.0f, 0.0f,     1.0f, 0.0f),
+                new Triangle(0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f,     1.0f, 0.0f,     1.0f, 1.0f),
 
                 // EAST                                                      
-                new Triangle(1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
-                new Triangle(1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+                new Triangle(1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f,     0.0f, 0.0f,     1.0f, 0.0f),
+                new Triangle(1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 1.0f, 1.0f,      0.0f, 1.0f,     1.0f, 0.0f,     1.0f, 1.0f),
 
                 // NORTH                                                     
-                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
-                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f,     0.0f, 0.0f,     1.0f, 0.0f),
+                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,      0.0f, 1.0f,     1.0f, 0.0f,     1.0f, 1.0f),
 
                 // WEST                                                      
-                new Triangle(0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
-                new Triangle(0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+                new Triangle(0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f,     0.0f, 0.0f,     1.0f, 0.0f),
+                new Triangle(0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f,     1.0f, 0.0f,     1.0f, 1.0f),
 
                 // TOP                                                       
-                new Triangle(0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
-                new Triangle(0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+                new Triangle(0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f,     0.0f, 0.0f,     1.0f, 0.0f),
+                new Triangle(0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f,     1.0f, 0.0f,     1.0f, 1.0f),
 
                 // BOTTOM                                                    
-                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
-                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f,     0.0f, 0.0f,     1.0f, 0.0f),
+                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f,     1.0f, 0.0f,     1.0f, 1.0f),
             });
         
         this.MatProj = this.MatrixMakeProjection(
@@ -297,7 +327,10 @@ public sealed class GameEngine: IDisposable {
 
         // this.fYaw = -0.46000004f;
 
-        
+        // x: 0, y: 
+
+        this.vCamera = new Vec3D(x: 0.0f, y: 0.79999995f, z: 4.5040007f, w: 1.0f);
+        this.fYaw = 0;
 
         return true;
     }
@@ -508,17 +541,17 @@ public sealed class GameEngine: IDisposable {
                         triProjected.T[1] = clipped[n].T[1];
                         triProjected.T[2] = clipped[n].T[2];
 
-                        triProjected.T[0].U = triProjected.T[0].U / triProjected.P[0].W;
-                        triProjected.T[1].U = triProjected.T[1].U / triProjected.P[1].W;
-                        triProjected.T[2].U = triProjected.T[2].U / triProjected.P[2].W;
+                        // triProjected.T[0].U = triProjected.T[0].U / triProjected.P[0].W;
+                        // triProjected.T[1].U = triProjected.T[1].U / triProjected.P[1].W;
+                        // triProjected.T[2].U = triProjected.T[2].U / triProjected.P[2].W;
 
-                        triProjected.T[0].V = triProjected.T[0].V / triProjected.P[0].W;
-                        triProjected.T[1].V = triProjected.T[1].V / triProjected.P[1].W;
-                        triProjected.T[2].V = triProjected.T[2].V / triProjected.P[2].W;
+                        // triProjected.T[0].V = triProjected.T[0].V / triProjected.P[0].W;
+                        // triProjected.T[1].V = triProjected.T[1].V / triProjected.P[1].W;
+                        // triProjected.T[2].V = triProjected.T[2].V / triProjected.P[2].W;
 
-                        triProjected.T[0].W = 1.0f / triProjected.P[0].W;
-                        triProjected.T[1].W = 1.0f / triProjected.P[1].W;
-                        triProjected.T[2].W = 1.0f / triProjected.P[2].W;
+                        // triProjected.T[0].W = 1.0f / triProjected.P[0].W;
+                        // triProjected.T[1].W = 1.0f / triProjected.P[1].W;
+                        // triProjected.T[2].W = 1.0f / triProjected.P[2].W;
 
                         // Scale into view, we moved the normalising into cartesian space
                         // out of the matrix.vector function from the previous videos, so
@@ -683,17 +716,17 @@ public sealed class GameEngine: IDisposable {
 
                 // var c = new SDL_Color { r = 0x00, g = 0x00, b = 0x00, a = 0x00 };
 
-                var verts = new [] {
-                    new SDL_Vertex { position = p1, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[0].U / ft.T[0].W, y = ft.T[0].V / ft.T[0].W } },
-                    new SDL_Vertex { position = p2, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[1].U / ft.T[1].W, y = ft.T[1].V / ft.T[1].W } },
-                    new SDL_Vertex { position = p3, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[2].U / ft.T[2].W, y = ft.T[2].V / ft.T[2].W } }
-                };
-
                 // var verts = new [] {
-                //     new SDL_Vertex { position = p1, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[0].U, y = ft.T[0].V } },
-                //     new SDL_Vertex { position = p2, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[1].U, y = ft.T[1].V } },
-                //     new SDL_Vertex { position = p3, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[2].U, y = ft.T[2].V } }
+                //     new SDL_Vertex { position = p1, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[0].U / ft.T[0].W, y = ft.T[0].V / ft.T[0].W } },
+                //     new SDL_Vertex { position = p2, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[1].U / ft.T[1].W, y = ft.T[1].V / ft.T[1].W } },
+                //     new SDL_Vertex { position = p3, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[2].U / ft.T[2].W, y = ft.T[2].V / ft.T[2].W } }
                 // };
+
+                var verts = new [] {
+                    new SDL_Vertex { position = p1, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[0].U, y = ft.T[0].V } },
+                    new SDL_Vertex { position = p2, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[1].U, y = ft.T[1].V } },
+                    new SDL_Vertex { position = p3, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[2].U, y = ft.T[2].V } }
+                };
 
                 // SDL_RenderGeometry(this.SDLRendererPtr, IntPtr.Zero, verts, 3, null, 0);
                 SDL_RenderGeometry(this.SDLRendererPtr, this.Texture, verts, 3, null, 0);
