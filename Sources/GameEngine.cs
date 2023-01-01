@@ -41,6 +41,8 @@ public sealed class GameEngine: IDisposable {
 
     private IntPtr SDLRendererPtr { get; init; }
 
+    private IntPtr Texture { get; init; }
+
     ///
 
     private bool Active { get; set; }
@@ -99,6 +101,17 @@ public sealed class GameEngine: IDisposable {
 
         ///
 
+        var img = SDL_LoadBMP("./mario.bmp");
+
+        if (img == IntPtr.Zero) {
+
+            throw new Exception();
+        }
+
+        this.Texture = SDL_CreateTextureFromSurface(this.SDLRendererPtr, img);
+
+        SDL_FreeSurface(img);
+
         // this.OnUpdate(0);
     }
 
@@ -122,8 +135,8 @@ public sealed class GameEngine: IDisposable {
 
     ///
 
-    // private bool RenderWireframes { get; set; } = true;
-    private bool RenderWireframes { get; set; } = false;
+    private bool RenderWireframes { get; set; } = true;
+    // private bool RenderWireframes { get; set; } = false;
 
     ///
 
@@ -237,7 +250,36 @@ public sealed class GameEngine: IDisposable {
         // this.Mesh = new Mesh(filename: "teapot.obj");
         // this.Mesh = new Mesh(filename: "axis.obj");
         // this.Mesh = new Mesh(filename: "axis_culled.obj");
-        this.Mesh = new Mesh(filename: "mountains.obj");
+        // this.Mesh = new Mesh(filename: "mountains.obj");
+
+
+        this.Mesh = new Mesh(
+            new Triangle[] {
+                
+                // SOUTH
+                new Triangle(0.0f, 0.0f, 0.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+                new Triangle(0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+
+                // EAST                                                      
+                new Triangle(1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+                new Triangle(1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+
+                // NORTH                                                     
+                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+
+                // WEST                                                      
+                new Triangle(0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+                new Triangle(0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+
+                // TOP                                                       
+                new Triangle(0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+                new Triangle(0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+
+                // BOTTOM                                                    
+                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+            });
         
         this.MatProj = this.MatrixMakeProjection(
             90.0f, 
@@ -396,6 +438,9 @@ public sealed class GameEngine: IDisposable {
                 triTransformed.P[0] = this.MatrixMultiplyVector(matWorld, tri.P[0]);
                 triTransformed.P[1] = this.MatrixMultiplyVector(matWorld, tri.P[1]);
                 triTransformed.P[2] = this.MatrixMultiplyVector(matWorld, tri.P[2]);
+                triTransformed.T[0] = tri.T[0];
+                triTransformed.T[1] = tri.T[1];
+                triTransformed.T[2] = tri.T[2];
 
                 // Calculate triangle Normal
                 // Get lines either side of triangle
@@ -434,6 +479,10 @@ public sealed class GameEngine: IDisposable {
                     triViewed.P[2] = this.MatrixMultiplyVector(matView, triTransformed.P[2]);
                     triViewed.Color = triTransformed.Color;
 
+                    triViewed.T[0] = triTransformed.T[0];
+                    triViewed.T[1] = triTransformed.T[1];
+                    triViewed.T[2] = triTransformed.T[2];
+
                     // Clip Viewed Triangle against near plane, this could form two additional
                     // additional triangles.
                     
@@ -455,6 +504,21 @@ public sealed class GameEngine: IDisposable {
                         triProjected.P[1] = this.MatrixMultiplyVector(this.MatProj, clipped[n].P[1]);
                         triProjected.P[2] = this.MatrixMultiplyVector(this.MatProj, clipped[n].P[2]);
                         triProjected.Color = clipped[n].Color;
+                        triProjected.T[0] = clipped[n].T[0];
+                        triProjected.T[1] = clipped[n].T[1];
+                        triProjected.T[2] = clipped[n].T[2];
+
+                        triProjected.T[0].U = triProjected.T[0].U / triProjected.P[0].W;
+                        triProjected.T[1].U = triProjected.T[1].U / triProjected.P[1].W;
+                        triProjected.T[2].U = triProjected.T[2].U / triProjected.P[2].W;
+
+                        triProjected.T[0].V = triProjected.T[0].V / triProjected.P[0].W;
+                        triProjected.T[1].V = triProjected.T[1].V / triProjected.P[1].W;
+                        triProjected.T[2].V = triProjected.T[2].V / triProjected.P[2].W;
+
+                        triProjected.T[0].W = 1.0f / triProjected.P[0].W;
+                        triProjected.T[1].W = 1.0f / triProjected.P[1].W;
+                        triProjected.T[2].W = 1.0f / triProjected.P[2].W;
 
                         // Scale into view, we moved the normalising into cartesian space
                         // out of the matrix.vector function from the previous videos, so
@@ -486,7 +550,19 @@ public sealed class GameEngine: IDisposable {
                         triProjected.P[2].Y *= 0.5f * this.HeightF;
 
                         // Store triangle for sorting
-                        vecTrianglesToRender.Add(new Triangle(triProjected.P[0], triProjected.P[1], triProjected.P[2], triProjected.Color));
+
+                        vecTrianglesToRender.Add(
+                            new Triangle(
+                                triProjected.P[0], 
+                                triProjected.P[1], 
+                                triProjected.P[2], 
+
+                                triProjected.T[0],
+                                triProjected.T[1],
+                                triProjected.T[2],
+                                
+                                triProjected.Color));
+
                         // vecTrianglesToRender.Add(triProjected);
                     }
                 }
@@ -500,7 +576,7 @@ public sealed class GameEngine: IDisposable {
 
         ///
 
-        var zeroTextCoord = new SDL_FPoint { };
+        // var zeroTextCoord = new SDL_FPoint { };
 
         ///
 
@@ -577,7 +653,18 @@ public sealed class GameEngine: IDisposable {
                     for (int w = 0; w < trisToAdd; w++) {
 
                         // listTriangles.Add(clipped[w]);
-                        listTriangles.Add(new Triangle(clipped[w].P[0], clipped[w].P[1], clipped[w].P[2], clipped[w].Color));
+
+                        listTriangles.Add(
+                            new Triangle(
+                                clipped[w].P[0], 
+                                clipped[w].P[1], 
+                                clipped[w].P[2], 
+
+                                clipped[w].T[0], 
+                                clipped[w].T[1], 
+                                clipped[w].T[2],                               
+                                
+                                clipped[w].Color));
                     }
                 }
 
@@ -594,13 +681,22 @@ public sealed class GameEngine: IDisposable {
                 var p2 = new SDL_FPoint { x = ft.P[1].X, y = ft.P[1].Y };
                 var p3 = new SDL_FPoint { x = ft.P[2].X, y = ft.P[2].Y };
 
+                // var c = new SDL_Color { r = 0x00, g = 0x00, b = 0x00, a = 0x00 };
+
                 var verts = new [] {
-                    new SDL_Vertex { position = p1, color = ft.Color, tex_coord = zeroTextCoord },
-                    new SDL_Vertex { position = p2, color = ft.Color, tex_coord = zeroTextCoord },
-                    new SDL_Vertex { position = p3, color = ft.Color, tex_coord = zeroTextCoord }
+                    new SDL_Vertex { position = p1, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[0].U / ft.T[0].W, y = ft.T[0].V / ft.T[0].W } },
+                    new SDL_Vertex { position = p2, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[1].U / ft.T[1].W, y = ft.T[1].V / ft.T[1].W } },
+                    new SDL_Vertex { position = p3, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[2].U / ft.T[2].W, y = ft.T[2].V / ft.T[2].W } }
                 };
 
-                SDL_RenderGeometry(this.SDLRendererPtr, IntPtr.Zero, verts, 3, null, 0);
+                // var verts = new [] {
+                //     new SDL_Vertex { position = p1, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[0].U, y = ft.T[0].V } },
+                //     new SDL_Vertex { position = p2, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[1].U, y = ft.T[1].V } },
+                //     new SDL_Vertex { position = p3, color = ft.Color, tex_coord = new SDL_FPoint { x = ft.T[2].U, y = ft.T[2].V } }
+                // };
+
+                // SDL_RenderGeometry(this.SDLRendererPtr, IntPtr.Zero, verts, 3, null, 0);
+                SDL_RenderGeometry(this.SDLRendererPtr, this.Texture, verts, 3, null, 0);
 
                 if (this.RenderWireframes) {
 
@@ -812,13 +908,14 @@ public sealed class GameEngine: IDisposable {
     }
 
     
-    public Vec3D VectorIntersectPlane(in Vec3D plane_p, ref Vec3D plane_n, in Vec3D lineStart, in Vec3D lineEnd) {
+    public Vec3D VectorIntersectPlane(in Vec3D plane_p, ref Vec3D plane_n, in Vec3D lineStart, in Vec3D lineEnd, out float t) {
 
         plane_n = VectorNormalise(plane_n);
         float plane_d = -VectorDotProduct(plane_n, plane_p);
         float ad = VectorDotProduct(lineStart, plane_n);
         float bd = VectorDotProduct(lineEnd, plane_n);
-        float t = (-plane_d - ad) / (bd - ad);
+        // float t = (-plane_d - ad) / (bd - ad);
+        t = (-plane_d - ad) / (bd - ad);
         var lineStartToEnd = VectorSub(lineEnd, lineStart);
         var lineToIntersect = VectorMul(lineStartToEnd, t);
         return VectorAdd(lineStart, lineToIntersect);
@@ -851,6 +948,12 @@ public sealed class GameEngine: IDisposable {
         var outsidePoints = new Vec3D[3];
         var outsidePointCount = 0;
 
+        var insideTex = new Vec2D[3];
+        var insideTexCount = 0;
+        
+        var outsideTex = new Vec2D[3];
+        var outsideTexCount = 0;
+
         // Get signed distance of each point in triangle to plane
         var d0 = dist(in_tri.P[0]);
         var d1 = dist(in_tri.P[1]);
@@ -859,28 +962,34 @@ public sealed class GameEngine: IDisposable {
         if (d0 >= 0) {
 
             insidePoints[insidePointCount++] = in_tri.P[0];
+            insideTex[insideTexCount++] = in_tri.T[0];
         }
         else {
 
             outsidePoints[outsidePointCount++] = in_tri.P[0];
+            outsideTex[outsideTexCount++] = in_tri.T[0];
         }
 
         if (d1 >= 0) {
 
             insidePoints[insidePointCount++] = in_tri.P[1];
+            insideTex[insideTexCount++] = in_tri.T[1];
         }
         else {
 
             outsidePoints[outsidePointCount++] = in_tri.P[1];
+            outsideTex[outsideTexCount++] = in_tri.T[1];
         }
 
         if (d2 >= 0) {
 
             insidePoints[insidePointCount++] = in_tri.P[2];
+            insideTex[insideTexCount++] = in_tri.T[2];
         }
         else {
 
             outsidePoints[outsidePointCount++] = in_tri.P[2];
+            outsideTex[outsideTexCount++] = in_tri.T[2];
         }
 
         // Now classify triangle points, and break the input triangle into 
@@ -917,11 +1026,18 @@ public sealed class GameEngine: IDisposable {
 
             // The inside point is valid, so keep that...
             out_tri1.P[0] = insidePoints[0];
+            out_tri1.T[0] = insideTex[0];
 
             // but the two new points are at the locations where the 
             // original sides of the triangle (lines) intersect with the plane
-            out_tri1.P[1] = VectorIntersectPlane(plane_p, ref plane_n, insidePoints[0], outsidePoints[0]);
-            out_tri1.P[2] = VectorIntersectPlane(plane_p, ref plane_n, insidePoints[0], outsidePoints[1]);
+            float t = 0;
+            out_tri1.P[1] = VectorIntersectPlane(plane_p, ref plane_n, insidePoints[0], outsidePoints[0], out t);
+            out_tri1.T[1].U = t * (outsideTex[0].U - insideTex[0].U) + insideTex[0].U;
+            out_tri1.T[1].V = t * (outsideTex[0].V - insideTex[0].V) + insideTex[0].V;
+
+            out_tri1.P[2] = VectorIntersectPlane(plane_p, ref plane_n, insidePoints[0], outsidePoints[1], out t);
+            out_tri1.T[2].U = t * (outsideTex[1].U - insideTex[0].U) + insideTex[0].U;
+            out_tri1.T[2].V = t * (outsideTex[1].V - insideTex[0].V) + insideTex[0].V;
 
             return 1; // Return the newly formed single triangle
         }
@@ -946,14 +1062,24 @@ public sealed class GameEngine: IDisposable {
             // intersects with the plane
             out_tri1.P[0] = insidePoints[0];
             out_tri1.P[1] = insidePoints[1];
-            out_tri1.P[2] = VectorIntersectPlane(plane_p, ref plane_n, insidePoints[0], outsidePoints[0]);
+            out_tri1.T[0] = insideTex[0];
+            out_tri1.T[1] = insideTex[1];
+
+            float t = 0;
+            out_tri1.P[2] = VectorIntersectPlane(plane_p, ref plane_n, insidePoints[0], outsidePoints[0], out t);
+            out_tri1.T[2].U = t * (outsideTex[0].U - insideTex[0].U) + insideTex[0].U;
+            out_tri1.T[2].V = t * (outsideTex[0].V - insideTex[0].V) + insideTex[0].V;
 
             // The second triangle is composed of one of he inside points, a
             // new point determined by the intersection of the other side of the 
             // triangle and the plane, and the newly created point above
             out_tri2.P[0] = insidePoints[1];
+            out_tri2.T[0] = insideTex[1];
             out_tri2.P[1] = out_tri1.P[2];
-            out_tri2.P[2] = VectorIntersectPlane(plane_p, ref plane_n, insidePoints[1], outsidePoints[0]);
+            out_tri2.T[1] = out_tri1.T[2];
+            out_tri2.P[2] = VectorIntersectPlane(plane_p, ref plane_n, insidePoints[1], outsidePoints[0], out t);
+            out_tri2.T[2].U = t * (outsideTex[0].U - insideTex[1].U) + insideTex[1].U;
+            out_tri2.T[2].V = t * (outsideTex[0].V - insideTex[1].V) + insideTex[1].V;
 
             return 2; // Return two newly formed triangles which form a quad
         }
@@ -964,6 +1090,12 @@ public sealed class GameEngine: IDisposable {
     ///
 
     public void Dispose() {
+
+        SDL_DestroyTexture(this.Texture);
+
+        SDL_DestroyRenderer(this.SDLRendererPtr);
+
+        SDL_DestroyWindow(this.SDLWindowPtr);
 
         SDL_Quit();
     }
