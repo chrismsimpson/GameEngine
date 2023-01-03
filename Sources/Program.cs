@@ -28,7 +28,7 @@ public struct Vec2D {
 public struct Vec3D {
     
     public float X { get; set; }
-    
+
     public float Y { get; set; }
     
     public float Z { get; set; }
@@ -60,6 +60,88 @@ public struct Vec3D {
 }
 
 public struct Triangle {
+
+    public bool Contains(Vec3D p) {
+
+        var a = new Vec3D(this.P[0].X - p.X, this.P[0].Y - p.Y, this.P[0].Z - p.Z);
+        var b = new Vec3D(this.P[1].X - p.X, this.P[1].Y - p.Y, this.P[1].Z - p.Z);
+        var c = new Vec3D(this.P[2].X - p.X, this.P[2].Y - p.Y, this.P[2].Z - p.Z);
+
+        var u = GameEngine.VectorCrossProduct(b, c);
+        var v = GameEngine.VectorCrossProduct(c, a);
+        var w = GameEngine.VectorCrossProduct(a, b);
+
+        if (GameEngine.VectorDotProduct(u, v) < 0.0f) {
+
+            return false;
+        }
+
+        if (GameEngine.VectorDotProduct(u, w) < 0.0f) {
+
+            return false;
+        }
+
+        return true;        
+    }
+
+    // public bool Contains(float x, float y, float z) {
+
+    //     return x <= this.MaxX && x >= this.MinX
+    //         && y <= this.MaxY && y >= this.MinY
+    //         && z <= this.MaxZ && z >= this.MinZ;
+    // }
+
+    
+    // public bool Contains(Vec3D v) {
+
+    //     return v.X <= this.MaxX && v.X >= this.MinX
+    //         && v.Y <= this.MaxY && v.Y >= this.MinY
+    //         && v.Z <= this.MaxZ && v.Z >= this.MinZ;
+    // }
+
+    public bool Contains(Triangle other) {
+
+        // var p = other.P[0];
+
+        return this.Contains(other.P[0])
+            || this.Contains(other.P[1])
+            || this.Contains(other.P[0]);
+    }
+
+    public bool Intersects(Triangle other) {
+
+        return this.Contains(other)
+            || other.Contains(this);
+    }
+
+    
+
+    ///
+
+    // private float? _MaxX = null;
+
+    // public float MaxX {
+
+    //     get {
+
+    //         if (this._MaxX is null) {
+
+    //             this._MaxX = MathF.Max(MathF.Max(this.P[0].X, this.P[1].X), this.P[2].X);
+    //         }
+
+    //         return this._MaxX.Value;
+    //     }
+    // }
+
+    // public float MinX { get => MathF.Min(MathF.Min(this.P[0].X, this.P[1].X), this.P[2].X); }
+
+    // public float MaxY { get => MathF.Max(MathF.Max(this.P[0].Y, this.P[1].Y), this.P[2].Y); }
+    
+    // public float MinY { get => MathF.Min(MathF.Min(this.P[0].Y, this.P[1].Y), this.P[2].Y); }
+
+    // public float MaxZ { get => MathF.Max(MathF.Max(this.P[0].Z, this.P[1].Z), this.P[2].Z); }
+    
+    // public float MinZ { get => MathF.Min(MathF.Min(this.P[0].Z, this.P[1].Z), this.P[2].Z); }
 
     public Vec3D[] P { get; init; }
 

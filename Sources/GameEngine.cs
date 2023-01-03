@@ -141,7 +141,7 @@ public sealed class GameEngine: IDisposable {
 
     private float fTheta { get; set; } = 0.0f;
 
-    private byte TriangleAlpha { get; set; } = 0xff;
+    private static byte TriangleAlpha { get; set; } = 0xff;
 
     ///
 
@@ -150,8 +150,8 @@ public sealed class GameEngine: IDisposable {
 
     ///
 
-    // private bool RenderClippedTriangles { get; set; } = true;
-    private bool RenderClippedTriangles { get; set; } = false;
+    // private static bool RenderClippedTriangles { get; set; } = true;
+    private static bool RenderClippedTriangles { get; set; } = false;
 
     ///
 
@@ -272,31 +272,33 @@ public sealed class GameEngine: IDisposable {
             new Triangle[] {
                 
                 // SOUTH
-                new Triangle(0.0f, 0.0f, 0.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+                // new Triangle(0.0f, 0.0f, 0.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
                 new Triangle(0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
 
-                // EAST                                                      
-                new Triangle(1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
-                new Triangle(1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+                
 
-                // NORTH                                                     
-                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
-                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+                // // EAST                                                      
+                // new Triangle(1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+                // new Triangle(1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
 
-                // WEST                                                      
-                new Triangle(0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
-                new Triangle(0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+                // // NORTH                                                     
+                // new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+                // new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
 
-                // TOP                                                       
-                new Triangle(0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
-                new Triangle(0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+                // // WEST                                                      
+                // new Triangle(0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+                // new Triangle(0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
 
-                // BOTTOM                                                    
-                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
-                new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+                // // TOP                                                       
+                // new Triangle(0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+                // new Triangle(0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
+
+                // // BOTTOM                                                    
+                // new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f),
+                // new Triangle(1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,     1.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f),
             });
         
-        this.MatProj = this.MatrixMakeProjection(
+        this.MatProj = MatrixMakeProjection(
             90.0f, 
             this.HeightF / this.WidthF,
             0.1f, 
@@ -364,7 +366,7 @@ public sealed class GameEngine: IDisposable {
             this.vCamera = new Vec3D(this.vCamera.X - (8.0f * elapsedTime), this.vCamera.Y, this.vCamera.Z, this.vCamera.W);
         }
 
-        var vForward = this.VectorMul(this.vLookDir, 8.0f * elapsedTime);
+        var vForward = VectorMul(this.vLookDir, 8.0f * elapsedTime);
 
         if (keyboardState.ContainsKey(SDL_Keycode.SDLK_w)) {
         
@@ -425,15 +427,15 @@ public sealed class GameEngine: IDisposable {
 
         var vTarget = new Vec3D(0.0f, 0.0f, 1.0f);
 
-        var matCameraRot = this.MatrixMakeRotationY(this.fYaw);
+        var matCameraRot = MatrixMakeRotationY(this.fYaw);
 
         this.vLookDir = MatrixMultiplyVector(matCameraRot, vTarget);
 
         vTarget = VectorAdd(this.vCamera, this.vLookDir);
 
-        var matCamera = this.MatrixPointAt(this.vCamera, vTarget, vUp);
+        var matCamera = MatrixPointAt(this.vCamera, vTarget, vUp);
 
-        var matView = this.MatrixQuickInverse(matCamera);
+        var matView = MatrixQuickInverse(matCamera);
 
         var ffFloat = Convert.ToSingle(0xff);
 
@@ -455,9 +457,9 @@ public sealed class GameEngine: IDisposable {
                 var triViewed = new Triangle();
 
                 // World Matrix Transform
-                triTransformed.P[0] = this.MatrixMultiplyVector(matWorld, tri.P[0]);
-                triTransformed.P[1] = this.MatrixMultiplyVector(matWorld, tri.P[1]);
-                triTransformed.P[2] = this.MatrixMultiplyVector(matWorld, tri.P[2]);
+                triTransformed.P[0] = MatrixMultiplyVector(matWorld, tri.P[0]);
+                triTransformed.P[1] = MatrixMultiplyVector(matWorld, tri.P[1]);
+                triTransformed.P[2] = MatrixMultiplyVector(matWorld, tri.P[2]);
                 triTransformed.T[0] = tri.T[0];
                 triTransformed.T[1] = tri.T[1];
                 triTransformed.T[2] = tri.T[2];
@@ -475,10 +477,10 @@ public sealed class GameEngine: IDisposable {
 
                 // Get Ray from triangle to camera
 
-                var vCameraRay = this.VectorSub(triTransformed.P[0], this.vCamera);
+                var vCameraRay = VectorSub(triTransformed.P[0], this.vCamera);
 
                 // If ray is aligned with normal, then triangle is visible
-                if (this.VectorDotProduct(normal, vCameraRay) < 0.0f) {
+                if (VectorDotProduct(normal, vCameraRay) < 0.0f) {
 
                     // Illumination
 
@@ -486,17 +488,17 @@ public sealed class GameEngine: IDisposable {
                     lightDirection = VectorNormalise(lightDirection);
 
                     // How "aligned" are light direction and triangle surface normal?
-                    var dp = MathF.Max(0.1f, this.VectorDotProduct(lightDirection, normal));
+                    var dp = MathF.Max(0.1f, VectorDotProduct(lightDirection, normal));
 
                     byte shade = Convert.ToByte(255.0f * dp);
 
                     // triTransformed.Color = new SDL_Color { r = shade, g = shade, b = shade, a = 0xff };
-                    triTransformed.Color = new SDL_Color { r = shade, g = shade, b = shade, a = this.TriangleAlpha };
+                    triTransformed.Color = new SDL_Color { r = shade, g = shade, b = shade, a = GameEngine.TriangleAlpha };
 
                     // Convert World Space --> View space 
-                    triViewed.P[0] = this.MatrixMultiplyVector(matView, triTransformed.P[0]);
-                    triViewed.P[1] = this.MatrixMultiplyVector(matView, triTransformed.P[1]);
-                    triViewed.P[2] = this.MatrixMultiplyVector(matView, triTransformed.P[2]);
+                    triViewed.P[0] = MatrixMultiplyVector(matView, triTransformed.P[0]);
+                    triViewed.P[1] = MatrixMultiplyVector(matView, triTransformed.P[1]);
+                    triViewed.P[2] = MatrixMultiplyVector(matView, triTransformed.P[2]);
                     triViewed.Color = triTransformed.Color;
 
                     triViewed.T[0] = triTransformed.T[0];
@@ -520,9 +522,9 @@ public sealed class GameEngine: IDisposable {
                     for (var n = 0; n < clippedTriangles; n++) {
 
                         // Project triangles from 3D --> 2D
-                        triProjected.P[0] = this.MatrixMultiplyVector(this.MatProj, clipped[n].P[0]);
-                        triProjected.P[1] = this.MatrixMultiplyVector(this.MatProj, clipped[n].P[1]);
-                        triProjected.P[2] = this.MatrixMultiplyVector(this.MatProj, clipped[n].P[2]);
+                        triProjected.P[0] = MatrixMultiplyVector(this.MatProj, clipped[n].P[0]);
+                        triProjected.P[1] = MatrixMultiplyVector(this.MatProj, clipped[n].P[1]);
+                        triProjected.P[2] = MatrixMultiplyVector(this.MatProj, clipped[n].P[2]);
                         triProjected.Color = clipped[n].Color;
                         triProjected.T[0] = clipped[n].T[0];
                         triProjected.T[1] = clipped[n].T[1];
@@ -604,12 +606,12 @@ public sealed class GameEngine: IDisposable {
 
         SDL_RenderClear(this.SDLRendererPtr);
 
-        SDL_SetRenderDrawColor(this.SDLRendererPtr, 0xff, 0x00, 0x00, 0xff); // line color
+        
 
-        if (this.TriangleAlpha != 0xff) {
+        // if (this.TriangleAlpha != 0xff) {
 
-            SDL_SetRenderDrawBlendMode(this.SDLRendererPtr, SDL_BlendMode.SDL_BLENDMODE_BLEND);
-        }
+        //     SDL_SetRenderDrawBlendMode(this.SDLRendererPtr, SDL_BlendMode.SDL_BLENDMODE_BLEND);
+        // }
 
         ///
 
@@ -736,14 +738,28 @@ public sealed class GameEngine: IDisposable {
 
             foreach (var ft in listTriangles) {
 
-                DrawTexturedTriangle(
-                    Convert.ToInt32(ft.P[0].X), Convert.ToInt32(ft.P[0].Y), ft.T[0].U, ft.T[0].V, ft.T[0].W,
-					Convert.ToInt32(ft.P[1].X), Convert.ToInt32(ft.P[1].Y), ft.T[1].U, ft.T[1].V, ft.T[1].W,
-					Convert.ToInt32(ft.P[2].X), Convert.ToInt32(ft.P[2].Y), ft.T[2].U, ft.T[2].V, ft.T[2].W, 
-                    this.Surface);
+                // SDL_RenderGeometry(
+                //     this.SDLRendererPtr, 
+                //     IntPtr.Zero, new [] { 
+                //         new SDL_Vertex { position = new SDL_FPoint { x = ft.P[0].X, y = ft.P[0].Y }, color = ft.Color },
+                //         new SDL_Vertex { position = new SDL_FPoint { x = ft.P[1].X, y = ft.P[1].Y }, color = ft.Color },
+                //         new SDL_Vertex { position = new SDL_FPoint { x = ft.P[2].X, y = ft.P[2].Y }, color = ft.Color }
+                //     }, 
+                //     3, 
+                //     null, 
+                //     0);
+
+                // DrawTexturedTriangle(
+                //     Convert.ToInt32(ft.P[0].X), Convert.ToInt32(ft.P[0].Y), ft.T[0].U, ft.T[0].V, ft.T[0].W,
+				// 	Convert.ToInt32(ft.P[1].X), Convert.ToInt32(ft.P[1].Y), ft.T[1].U, ft.T[1].V, ft.T[1].W,
+				// 	Convert.ToInt32(ft.P[2].X), Convert.ToInt32(ft.P[2].Y), ft.T[2].U, ft.T[2].V, ft.T[2].W, 
+                //     this.Surface);
+
                     // this.Texture);
 
                 if (this.RenderWireframes) {
+
+                    SDL_SetRenderDrawColor(this.SDLRendererPtr, 0xff, 0x00, 0x00, 0xff); // red line color
 
                     SDL_RenderDrawLineF(this.SDLRendererPtr, ft.P[0].X, ft.P[0].Y, ft.P[1].X, ft.P[1].Y);
                     SDL_RenderDrawLineF(this.SDLRendererPtr, ft.P[1].X, ft.P[1].Y, ft.P[2].X, ft.P[2].Y);
@@ -754,14 +770,131 @@ public sealed class GameEngine: IDisposable {
 
         }
 
-        // WriteLine();
+        ///
 
-        if (this.TriangleAlpha != 0xff) {
+
+        // var xSub = 10.0f;
+        // var ySub = 10.0f;
+
+        // var xSubNormal = 1.0f / xSub;
+
+        // var ySubNormal = 1.0f / ySub;
+
+        // for (var y = 0.0f; y <= 1.0f; y += ySubNormal) {
+
+        //     for (var x = 0.0f; x <= 1.0f; x += xSubNormal) {
+
+        //         var x1 = x * xSubNormal;
+        //         var y1 = y * ySubNormal;
+
+        //         var x2 = (x + 1) * xSubNormal;
+        //         var y2 = (y + 1) * ySubNormal;
+
+        //         var a = new Triangle(x1, y1, 1.0f, x2, y2, 1.0f, x1, y2, 1.0f);
+        //         var b = new Triangle()
+
+        //         SDL_RenderDrawLineF(this.SDLRendererPtr, x1, y2, x1, y1);
+        //         SDL_RenderDrawLineF(this.SDLRendererPtr, x1, y1, x2, y2);
+        //         SDL_RenderDrawLineF(this.SDLRendererPtr, x2, y2, x1, y2);
+
+        //         SDL_RenderDrawLineF(this.SDLRendererPtr, x1, y1, x2, y1);
+        //         SDL_RenderDrawLineF(this.SDLRendererPtr, x2, y1, x2, y2);
+        //         SDL_RenderDrawLineF(this.SDLRendererPtr, x2, y2, x1, y1);
+        //     }
+        // }
+
+        var yellowTri = new Triangle(0.15f, 0.75f, 1.0f, 0.55f, 0.15f, 1.0f, 0.85f, 0.85f, 1.0f);
+
+        ///
+
+        SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0xff, 0xff); // blue line color
+
+        ///
+
+        var xSubdivisions = 10.0f;
+        var ySubdivisions = 10.0f;
+
+        var numTriangles = Convert.ToInt32(xSubdivisions * ySubdivisions) * 2;
         
-            SDL_SetRenderDrawBlendMode(this.SDLRendererPtr, SDL_BlendMode.SDL_BLENDMODE_NONE);
+        var subDivN = 0;
+
+        var subDivTris = new Triangle[numTriangles];
+
+        for (var ySubdivision = 0.0f; ySubdivision < ySubdivisions; ++ySubdivision) {
+
+            var y1 = ySubdivision / ySubdivisions;
+            var y2 = (ySubdivision + 1.0f) / ySubdivisions;
+
+            for (var xSubdivision = 0.0f; xSubdivision < xSubdivisions; ++xSubdivision) {
+
+                var x1 = xSubdivision / xSubdivisions;
+                var x2 = (xSubdivision + 1.0f) / xSubdivisions;
+
+                subDivTris[subDivN++] = new Triangle(x1, y1, 1.0f, x2, y2, 1.0f, x1, y2, 1.0f);
+                
+                subDivTris[subDivN++] = new Triangle(x2, y2, 1.0f, x1, y1, 1.0f, x2, y1, 1.0f);
+            }
         }
 
+        var xSubDivScale = 500.0f;
+        var ySubDivScale = 500.0f;
+
+        var xSubOffset = 20;
+        var ySubOffset = 20;
+
+        // foreach (var tri in subDivTris) {
+
+        //     if (tri.Intersects(yellowTri)) {
+
+        //         SDL_RenderDrawLineF(this.SDLRendererPtr, tri.P[0].X * xSubDivScale + xSubOffset, tri.P[0].Y * ySubDivScale + ySubOffset, tri.P[1].X * xSubDivScale + xSubOffset, tri.P[1].Y * ySubDivScale + ySubOffset);
+        //         SDL_RenderDrawLineF(this.SDLRendererPtr, tri.P[1].X * xSubDivScale + xSubOffset, tri.P[1].Y * ySubDivScale + ySubOffset, tri.P[2].X * xSubDivScale + xSubOffset, tri.P[2].Y * ySubDivScale + ySubOffset);
+        //         SDL_RenderDrawLineF(this.SDLRendererPtr, tri.P[2].X * xSubDivScale + xSubOffset, tri.P[2].Y * ySubDivScale + ySubOffset, tri.P[0].X * xSubDivScale + xSubOffset, tri.P[0].Y * ySubDivScale + ySubOffset);
+        //     }
+
+        // }
+
+        var a = new Vec3D(0.0f, 1.0f, 1.0f);
+        var b = new Vec3D(1.0f, 0.0f, 1.0f);
+
+        ///
+
+        SDL_SetRenderDrawColor(this.SDLRendererPtr, 0xff, 0xff, 0x00, 0xff);
+
+        var clippy = new [] {
+            new Triangle(),
+            new Triangle()
+        };
+
+        var clippyNum = GameEngine.TriangleClipAgainstPlane(a, b, yellowTri, ref clippy[0], ref clippy[1]);
+
+        for (var c = 0; c < clippyNum; c++) {
+
+            var clippedTri = clippy[c];
+
+            SDL_RenderDrawLineF(this.SDLRendererPtr, clippedTri.P[0].X * xSubDivScale + xSubOffset, clippedTri.P[0].Y * ySubDivScale + ySubOffset, clippedTri.P[1].X * xSubDivScale + xSubOffset, clippedTri.P[1].Y * ySubDivScale + ySubOffset);
+            SDL_RenderDrawLineF(this.SDLRendererPtr, clippedTri.P[1].X * xSubDivScale + xSubOffset, clippedTri.P[1].Y * ySubDivScale + ySubOffset, clippedTri.P[2].X * xSubDivScale + xSubOffset, clippedTri.P[2].Y * ySubDivScale + ySubOffset);
+            SDL_RenderDrawLineF(this.SDLRendererPtr, clippedTri.P[2].X * xSubDivScale + xSubOffset, clippedTri.P[2].Y * ySubDivScale + ySubOffset, clippedTri.P[0].X * xSubDivScale + xSubOffset, clippedTri.P[0].Y * ySubDivScale + ySubOffset);
+        }
+
+        ///
+
+        SDL_SetRenderDrawColor(this.SDLRendererPtr, 0xff, 0xff, 0x00, 0xff);
+
+        // SDL_RenderDrawLineF(this.SDLRendererPtr, yellowTri.P[0].X * xSubDivScale + xSubOffset, yellowTri.P[0].Y * ySubDivScale + ySubOffset, yellowTri.P[1].X * xSubDivScale + xSubOffset, yellowTri.P[1].Y * ySubDivScale + ySubOffset);
+        // SDL_RenderDrawLineF(this.SDLRendererPtr, yellowTri.P[1].X * xSubDivScale + xSubOffset, yellowTri.P[1].Y * ySubDivScale + ySubOffset, yellowTri.P[2].X * xSubDivScale + xSubOffset, yellowTri.P[2].Y * ySubDivScale + ySubOffset);
+        // SDL_RenderDrawLineF(this.SDLRendererPtr, yellowTri.P[2].X * xSubDivScale + xSubOffset, yellowTri.P[2].Y * ySubDivScale + ySubOffset, yellowTri.P[0].X * xSubDivScale + xSubOffset, yellowTri.P[0].Y * ySubDivScale + ySubOffset);
+
+        ///
+
+        SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0xff, 0x00, 0xff);
+
+        SDL_RenderDrawLineF(this.SDLRendererPtr, a.X * xSubDivScale + xSubOffset, a.Y * ySubDivScale + ySubOffset, b.X * xSubDivScale + xSubOffset, b.Y * ySubDivScale + ySubOffset);
+
+        ///
+
         SDL_RenderPresent(this.SDLRendererPtr);
+
+        
 
         ///
 
@@ -1136,13 +1269,262 @@ public sealed class GameEngine: IDisposable {
     //     // SDL_UnlockTexture(texture);
     // }
 
+    public void Swap(ref int a, ref int b) {
+
+        var _a = a;
+        a = b;
+        b = _a;
+    }
+
+    // public void DrawTexturedTriangle(
+    //     int x1, int y1, float u1, float v1, float w1,
+    //     int x2, int y2, float u2, float v2, float w2,
+    //     int x3, int y3, float u3, float v3, float w3,
+    //     // IntPtr texture
+    //     IntPtr surface) {
+
+    //     SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0xff, 0xff);
+ 
+    //     if (y2 < y1) {
+
+    //         var _y1 = y1;
+    //         y1 = y2;
+    //         y2 = _y1;
+
+    //         var _x1 = x1;
+    //         x1 = x2;
+    //         x2 = _x1;
+
+    //         var _u1 = u1;
+    //         u1 = u2;
+    //         u2 = _u1;
+
+    //         var _v1 = v1;
+    //         v1 = v2;
+    //         v2 = _v1;
+
+    //         // var _w1 = w1;
+    //         // w1 = w2;
+    //         // w2 = _w1;
+    //     }
+
+    //     if (y3 < y1) {
+
+    //         var _y1 = y1;
+    //         y1 = y3;
+    //         y3 = _y1;
+
+    //         var _x1 = x1;
+    //         x1 = x3;
+    //         x3 = _x1;
+
+    //         var _u1 = u1;
+    //         u1 = u3;
+    //         u3 = _u1;
+
+    //         var _v1 = v1;
+    //         v1 = v3;
+    //         v3 = _v1;
+
+    //         // var _w1 = w1;
+    //         // w1 = w3;
+    //         // w3 = _w1;
+    //     }
+
+    //     if (y3 < y2) {
+
+    //         var _y2 = y2;
+    //         y2 = y3;
+    //         y3 = _y2;
+
+    //         var _x2 = x2;
+    //         x2 = x3;
+    //         x3 = _x2;
+
+    //         var _u2 = u2;
+    //         u2 = u3;
+    //         u3 = _u2;
+
+    //         var _v2 = v2;
+    //         v2 = v3;
+    //         v3 = _v2;
+
+    //         // var _w2 = w2;
+    //         // w2 = w3;
+    //         // w3 = _w2;
+    //     }
+
+	// 	int dy1 = y2 - y1;
+	// 	int dx1 = x2 - x1;
+	// 	float dv1 = v2 - v1;
+	// 	float du1 = u2 - u1;
+	// 	// float dw1 = w2 - w1;
+
+	// 	int dy2 = y3 - y1;
+	// 	int dx2 = x3 - x1;
+	// 	float dv2 = v3 - v1;
+	// 	float du2 = u3 - u1;
+	// 	// float dw2 = w3 - w1;
+
+	// 	float tex_u = 0.0f;
+    //     float tex_v = 0.0f;
+    //     // float tex_w = 0.0f;
+
+        
+	// 	float dax_step = 0, dbx_step = 0,
+	// 		du1_step = 0, dv1_step = 0,
+	// 		du2_step = 0, dv2_step = 0;
+	// 		// dw1_step=0, dw2_step=0;
+
+    //     if (dy1 != 0) dax_step = dx1 / MathF.Abs(dy1);
+    //     if (dy2 != 0) dbx_step = dx2 / MathF.Abs(dy2);
+
+    //     if (dy1 != 0) du1_step = du1 / MathF.Abs(dy1);
+    //     if (dy1 != 0) dv1_step = dv1 / MathF.Abs(dy1);
+    //     // if (dy1 != 0) dw1_step = dw1 / (float)Math.Abs(dy1);
+
+    //     if (dy2 != 0) du2_step = du2 / MathF.Abs(dy2);
+    //     if (dy2 != 0) dv2_step = dv2 / MathF.Abs(dy2);
+    //     // if (dy2 != 0) dw2_step = dw2 / (float)Math.Abs(dy2);
+
+	// 	if (dy1 != 0) {
+
+	// 		for (int i = y1; i <= y2; i++) {
+
+    //             var ax = Convert.ToInt32(((float) x1) + (i - y1) * dax_step);
+    //             var bx = Convert.ToInt32(((float) x1) + (i - y1) * dbx_step);
+
+	// 			float tex_su = u1 + (float)(i - y1) * du1_step;
+	// 			float tex_sv = v1 + (float)(i - y1) * dv1_step;
+	// 			// float tex_sw = w1 + (float)(i - y1) * dw1_step;
+
+	// 			float tex_eu = u1 + (float)(i - y1) * du2_step;
+	// 			float tex_ev = v1 + (float)(i - y1) * dv2_step;
+	// 			// float tex_ew = w1 + (float)(i - y1) * dw2_step;
+
+    //             if (ax > bx) {
+
+    //                 var _ax = ax;
+    //                 ax = bx;
+    //                 bx = _ax;
+
+    //                 var _tex_su = tex_su;
+    //                 tex_su = tex_eu;
+    //                 tex_eu = _tex_su;
+
+    //                 var _tex_sv = tex_sv;
+    //                 tex_sv = tex_ev;
+    //                 tex_ev = _tex_sv;
+
+    //                 // var _tex_sw = tex_sw;
+    //                 // tex_sw = tex_ew;
+    //                 // tex_ew = _tex_sw;
+    //             }
+                
+	// 			tex_u = tex_su;
+	// 			tex_v = tex_sv;
+	// 			// tex_w = tex_sw;
+
+	// 			float tstep = 1.0f / ((float)(bx - ax));
+	// 			float t = 0.0f;
+
+	// 			for (int j = ax; j < bx; j++) {
+
+	// 				tex_u = (1.0f - t) * tex_su + t * tex_eu;
+	// 				tex_v = (1.0f - t) * tex_sv + t * tex_ev;
+	// 				// tex_w = (1.0f - t) * tex_sw + t * tex_ew;
+
+    //                 // SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0xff, 0xff);
+
+    //                 // SDL_RenderDrawPoint(this.SDLRendererPtr, j, i);
+					
+	// 				t += tstep;
+	// 			}
+    //         }
+    //     }
+        
+	// 	dy1 = y3 - y2;
+	// 	dx1 = x3 - x2;
+	// 	dv1 = v3 - v2;
+	// 	du1 = u3 - u2;
+	// 	// dw1 = w3 - w2;
+
+	// 	if (dy1 != 0) { dax_step = dx1 / MathF.Abs(dy1); }
+	// 	if (dy2 != 0) { dbx_step = dx2 / MathF.Abs(dy2); }
+
+	// 	du1_step = 0; dv1_step = 0;
+	// 	if (dy1 != 0) { du1_step = du1 / MathF.Abs(dy1); }
+	// 	if (dy1 != 0) { dv1_step = dv1 / MathF.Abs(dy1); }
+	// 	// if (dy1 != 0) { dw1_step = dw1 / MathF.Abs(dy1); }
+
+    //     if (dy1 != 0) {
+
+    //         for (int i = y2; i <= y3; i++) {
+
+    //             int ax = Convert.ToInt32(Convert.ToSingle(x2) + (i - y2) * dax_step);
+    //             int bx = Convert.ToInt32(Convert.ToSingle(x1) + (i - y1) * dbx_step);
+
+	// 			float tex_su = u2 + (float)(i - y2) * du1_step;
+	// 			float tex_sv = v2 + (float)(i - y2) * dv1_step;
+	// 			// float tex_sw = w2 + (float)(i - y2) * dw1_step;
+
+	// 			float tex_eu = u1 + (float)(i - y1) * du2_step;
+	// 			float tex_ev = v1 + (float)(i - y1) * dv2_step;
+	// 			// float tex_ew = w1 + (float)(i - y1) * dw2_step;
+
+    //             if (ax > bx) {
+
+    //                 var _ax = ax;
+    //                 ax = bx;
+    //                 bx = _ax;
+
+    //                 var _tex_su = tex_su;
+    //                 tex_su = tex_eu;
+    //                 tex_eu = _tex_su;
+
+    //                 var _tex_sv = tex_sv;
+    //                 tex_sv = tex_ev;
+    //                 tex_ev = _tex_sv;
+
+    //                 // var _tex_sw = tex_sw;
+    //                 // tex_sw = tex_ew;
+    //                 // tex_ew = _tex_sw;
+    //             }
+                
+	// 			tex_u = tex_su;
+	// 			tex_v = tex_sv;
+	// 			// tex_w = tex_sw;
+
+	// 			float tstep = 1.0f / ((float)(bx - ax));
+	// 			float t = 0.0f;
+
+	// 			for (int j = ax; j < bx; j++) {
+
+	// 				tex_u = (1.0f - t) * tex_su + t * tex_eu;
+	// 				tex_v = (1.0f - t) * tex_sv + t * tex_ev;
+	// 				// tex_w = (1.0f - t) * tex_sw + t * tex_ew;
+
+    //                 // SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0xff, 0xff);
+
+    //                 // SDL_RenderDrawPoint(this.SDLRendererPtr, j, i);
+
+                    
+					
+	// 				t += tstep;
+	// 			}
+    //         }
+    //     }
+    // }
+
 
     public void DrawTexturedTriangle(
-        int x1, int y1, float u1, float v1, float w1,
-        int x2, int y2, float u2, float v2, float w2,
-        int x3, int y3, float u3, float v3, float w3,
+        float x1, float y1, float u1, float v1, float w1,
+        float x2, float y2, float u2, float v2, float w2,
+        float x3, float y3, float u3, float v3, float w3,
         // IntPtr texture
         IntPtr surface) {
+
+        SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0xff, 0xff);
  
         if (y2 < y1) {
 
@@ -1162,12 +1544,12 @@ public sealed class GameEngine: IDisposable {
             v1 = v2;
             v2 = _v1;
 
-            var _w1 = w1;
-            w1 = w2;
-            w2 = _w1;
+            // var _w1 = w1;
+            // w1 = w2;
+            // w2 = _w1;
         }
 
-        if (y3 > y1) {
+        if (y3 < y1) {
 
             var _y1 = y1;
             y1 = y3;
@@ -1185,9 +1567,9 @@ public sealed class GameEngine: IDisposable {
             v1 = v3;
             v3 = _v1;
 
-            var _w1 = w1;
-            w1 = w3;
-            w3 = _w1;
+            // var _w1 = w1;
+            // w1 = w3;
+            // w3 = _w1;
         }
 
         if (y3 < y2) {
@@ -1208,58 +1590,58 @@ public sealed class GameEngine: IDisposable {
             v2 = v3;
             v3 = _v2;
 
-            var _w2 = w2;
-            w2 = w3;
-            w3 = _w2;
+            // var _w2 = w2;
+            // w2 = w3;
+            // w3 = _w2;
         }
 
-		int dy1 = y2 - y1;
-		int dx1 = x2 - x1;
+		float dy1 = y2 - y1;
+		float dx1 = x2 - x1;
 		float dv1 = v2 - v1;
 		float du1 = u2 - u1;
-		float dw1 = w2 - w1;
+		// float dw1 = w2 - w1;
 
-		int dy2 = y3 - y1;
-		int dx2 = x3 - x1;
+		float dy2 = y3 - y1;
+		float dx2 = x3 - x1;
 		float dv2 = v3 - v1;
 		float du2 = u3 - u1;
-		float dw2 = w3 - w1;
+		// float dw2 = w3 - w1;
 
 		float tex_u = 0.0f;
         float tex_v = 0.0f;
-        float tex_w = 0.0f;
+        // float tex_w = 0.0f;
 
         
 		float dax_step = 0, dbx_step = 0,
 			du1_step = 0, dv1_step = 0,
-			du2_step = 0, dv2_step = 0,
-			dw1_step=0, dw2_step=0;
+			du2_step = 0, dv2_step = 0;
+			// dw1_step=0, dw2_step=0;
 
-		if (dy1 != 0) { dax_step = dx1 / MathF.Abs(dy1); }
-		if (dy2 != 0) { dbx_step = dx2 / MathF.Abs(dy2); }
+        if (dy1 != 0) dax_step = dx1 / MathF.Abs(dy1);
+        if (dy2 != 0) dbx_step = dx2 / MathF.Abs(dy2);
 
-		if (dy1 != 0) { du1_step = du1 / MathF.Abs(dy1); }
-		if (dy1 != 0) { dv1_step = dv1 / MathF.Abs(dy1); }
-		if (dy1 != 0) { dw1_step = dw1 / MathF.Abs(dy1); }
+        if (dy1 != 0) du1_step = du1 / MathF.Abs(dy1);
+        if (dy1 != 0) dv1_step = dv1 / MathF.Abs(dy1);
+        // if (dy1 != 0) dw1_step = dw1 / (float)Math.Abs(dy1);
 
-		if (dy2 != 0) { du2_step = du2 / MathF.Abs(dy2); }
-		if (dy2 != 0) { dv2_step = dv2 / MathF.Abs(dy2); }
-		if (dy2 != 0) { dw2_step = dw2 / MathF.Abs(dy2); }
+        if (dy2 != 0) du2_step = du2 / MathF.Abs(dy2);
+        if (dy2 != 0) dv2_step = dv2 / MathF.Abs(dy2);
+        // if (dy2 != 0) dw2_step = dw2 / (float)Math.Abs(dy2);
 
 		if (dy1 != 0) {
 
-			for (int i = y1; i <= y2; i++) {
+			for (float i = y1; i <= y2; i++) {
 
-                var ax = Convert.ToInt32(((float) x1) + (i - y1) * dax_step);
-                var bx = Convert.ToInt32(((float) x1) + (i - y1) * dbx_step);
+                var ax = x1 + (i - y1) * dax_step;
+                var bx = x1 + (i - y1) * dbx_step;
 
-				float tex_su = u1 + (float)(i - y1) * du1_step;
-				float tex_sv = v1 + (float)(i - y1) * dv1_step;
-				float tex_sw = w1 + (float)(i - y1) * dw1_step;
+				float tex_su = u1 + (i - y1) * du1_step;
+				float tex_sv = v1 + (i - y1) * dv1_step;
+				// float tex_sw = w1 + (float)(i - y1) * dw1_step;
 
-				float tex_eu = u1 + (float)(i - y1) * du2_step;
-				float tex_ev = v1 + (float)(i - y1) * dv2_step;
-				float tex_ew = w1 + (float)(i - y1) * dw2_step;
+				float tex_eu = u1 + (i - y1) * du2_step;
+				float tex_ev = v1 + (i - y1) * dv2_step;
+				// float tex_ew = w1 + (float)(i - y1) * dw2_step;
 
                 if (ax > bx) {
 
@@ -1275,27 +1657,31 @@ public sealed class GameEngine: IDisposable {
                     tex_sv = tex_ev;
                     tex_ev = _tex_sv;
 
-                    var _tex_sw = tex_sw;
-                    tex_sw = tex_ew;
-                    tex_ew = _tex_sw;
+                    // var _tex_sw = tex_sw;
+                    // tex_sw = tex_ew;
+                    // tex_ew = _tex_sw;
                 }
                 
 				tex_u = tex_su;
 				tex_v = tex_sv;
-				tex_w = tex_sw;
+				// tex_w = tex_sw;
 
-				float tstep = 1.0f / ((float)(bx - ax));
+				float tstep = 1.0f / (bx - ax);
 				float t = 0.0f;
 
-				for (int j = ax; j < bx; j++) {
+				for (var j = ax; j < bx; j++) {
 
 					tex_u = (1.0f - t) * tex_su + t * tex_eu;
 					tex_v = (1.0f - t) * tex_sv + t * tex_ev;
-					tex_w = (1.0f - t) * tex_sw + t * tex_ew;
+					// tex_w = (1.0f - t) * tex_sw + t * tex_ew;
 
-                    SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0xff, 0xff);
+                    // SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0xff, 0xff);
 
-                    SDL_RenderDrawPoint(this.SDLRendererPtr, j, i);
+                    // SDL_RenderDrawPoint(this.SDLRendererPtr, j, i);
+
+                    SDL_RenderDrawPointsF(this.SDLRendererPtr, new [] { new SDL_FPoint { x = j, y = i } }, 2);
+
+                    
 					
 					t += tstep;
 				}
@@ -1306,7 +1692,7 @@ public sealed class GameEngine: IDisposable {
 		dx1 = x3 - x2;
 		dv1 = v3 - v2;
 		du1 = u3 - u2;
-		dw1 = w3 - w2;
+		// dw1 = w3 - w2;
 
 		if (dy1 != 0) { dax_step = dx1 / MathF.Abs(dy1); }
 		if (dy2 != 0) { dbx_step = dx2 / MathF.Abs(dy2); }
@@ -1314,22 +1700,22 @@ public sealed class GameEngine: IDisposable {
 		du1_step = 0; dv1_step = 0;
 		if (dy1 != 0) { du1_step = du1 / MathF.Abs(dy1); }
 		if (dy1 != 0) { dv1_step = dv1 / MathF.Abs(dy1); }
-		if (dy1 != 0) { dw1_step = dw1 / MathF.Abs(dy1); }
+		// if (dy1 != 0) { dw1_step = dw1 / MathF.Abs(dy1); }
 
         if (dy1 != 0) {
 
-            for (int i = y2; i <= y3; i++) {
+            for (var i = y2; i <= y3; i++) {
 
-                int ax = Convert.ToInt32(Convert.ToSingle(x2) + (i - y2) * dax_step);
-                int bx = Convert.ToInt32(Convert.ToSingle(x1) + (i - y1) * dbx_step);
+                var ax = x2 + (i - y2) * dax_step;
+                var bx = x1 + (i - y1) * dbx_step;
 
 				float tex_su = u2 + (float)(i - y2) * du1_step;
 				float tex_sv = v2 + (float)(i - y2) * dv1_step;
-				float tex_sw = w2 + (float)(i - y2) * dw1_step;
+				// float tex_sw = w2 + (float)(i - y2) * dw1_step;
 
 				float tex_eu = u1 + (float)(i - y1) * du2_step;
 				float tex_ev = v1 + (float)(i - y1) * dv2_step;
-				float tex_ew = w1 + (float)(i - y1) * dw2_step;
+				// float tex_ew = w1 + (float)(i - y1) * dw2_step;
 
                 if (ax > bx) {
 
@@ -1345,27 +1731,30 @@ public sealed class GameEngine: IDisposable {
                     tex_sv = tex_ev;
                     tex_ev = _tex_sv;
 
-                    var _tex_sw = tex_sw;
-                    tex_sw = tex_ew;
-                    tex_ew = _tex_sw;
+                    // var _tex_sw = tex_sw;
+                    // tex_sw = tex_ew;
+                    // tex_ew = _tex_sw;
                 }
                 
 				tex_u = tex_su;
 				tex_v = tex_sv;
-				tex_w = tex_sw;
+				// tex_w = tex_sw;
 
-				float tstep = 1.0f / ((float)(bx - ax));
+				float tstep = 1.0f / (bx - ax);
 				float t = 0.0f;
 
-				for (int j = ax; j < bx; j++) {
+				for (var j = ax; j < bx; j++) {
 
 					tex_u = (1.0f - t) * tex_su + t * tex_eu;
 					tex_v = (1.0f - t) * tex_sv + t * tex_ev;
-					tex_w = (1.0f - t) * tex_sw + t * tex_ew;
+					// tex_w = (1.0f - t) * tex_sw + t * tex_ew;
 
-                    SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0xff, 0xff);
+                    // SDL_SetRenderDrawColor(this.SDLRendererPtr, 0x00, 0x00, 0xff, 0xff);
 
-                    SDL_RenderDrawPoint(this.SDLRendererPtr, j, i);
+                    // SDL_RenderDrawPoint(this.SDLRendererPtr, j, i);
+
+                    SDL_RenderDrawPointsF(this.SDLRendererPtr, new [] { new SDL_FPoint { x = j, y = i } }, 2);
+                    
 					
 					t += tstep;
 				}
@@ -1375,7 +1764,7 @@ public sealed class GameEngine: IDisposable {
 
     ///
 
-    public Vec3D MatrixMultiplyVector(in Mat4x4 m, in Vec3D i) {
+    public static Vec3D MatrixMultiplyVector(in Mat4x4 m, in Vec3D i) {
 
         return new Vec3D(
             x: i.X * m.M[0][0] + i.Y * m.M[1][0] + i.Z * m.M[2][0] + m.M[3][0],
@@ -1384,7 +1773,7 @@ public sealed class GameEngine: IDisposable {
             w: i.X * m.M[0][3] + i.Y * m.M[1][3] + i.Z * m.M[2][3] + m.M[3][3]);
     }
 
-    public Mat4x4 MatrixMakeIdentity() {
+    public static Mat4x4 MatrixMakeIdentity() {
 
         var matrix = new Mat4x4();
         matrix.M[0][0] = 1.0f;
@@ -1394,7 +1783,7 @@ public sealed class GameEngine: IDisposable {
         return matrix;
     }
 
-    public Mat4x4 MatrixMakeRotationX(float fAngleRad) {
+    public static Mat4x4 MatrixMakeRotationX(float fAngleRad) {
 
         var matrix = new Mat4x4();
         matrix.M[0][0] = 1.0f;
@@ -1406,7 +1795,7 @@ public sealed class GameEngine: IDisposable {
         return matrix;
     }
 
-    public Mat4x4 MatrixMakeRotationY(float fAngleRad) {
+    public static Mat4x4 MatrixMakeRotationY(float fAngleRad) {
 
         var matrix = new Mat4x4();
         matrix.M[0][0] = MathF.Cos(fAngleRad);
@@ -1418,7 +1807,7 @@ public sealed class GameEngine: IDisposable {
         return matrix;
     }
 
-    public Mat4x4 MatrixMakeRotationZ(float fAngleRad) {
+    public static Mat4x4 MatrixMakeRotationZ(float fAngleRad) {
 
         var matrix = new Mat4x4();
         matrix.M[0][0] = MathF.Cos(fAngleRad);
@@ -1430,7 +1819,7 @@ public sealed class GameEngine: IDisposable {
         return matrix;
     }
 
-    public Mat4x4 MatrixMakeTranslation(float x, float y, float z) {
+    public static Mat4x4 MatrixMakeTranslation(float x, float y, float z) {
 
         var matrix = new Mat4x4();
         matrix.M[0][0] = 1.0f;
@@ -1443,7 +1832,7 @@ public sealed class GameEngine: IDisposable {
         return matrix;
     }
 
-    public Mat4x4 MatrixMakeProjection(float fFovDegrees, float fAspectRatio, float fNear, float fFar) {
+    public static Mat4x4 MatrixMakeProjection(float fFovDegrees, float fAspectRatio, float fNear, float fFar) {
 
         float fFovRad = 1.0f / MathF.Tan(fFovDegrees * 0.5f / 180.0f * 3.14159f);
         
@@ -1457,7 +1846,7 @@ public sealed class GameEngine: IDisposable {
         return matrix;
     }
 
-    public Mat4x4 MatrixMultiplyMatrix(in Mat4x4 m1, in Mat4x4 m2) {
+    public static Mat4x4 MatrixMultiplyMatrix(in Mat4x4 m1, in Mat4x4 m2) {
 
         var matrix = new Mat4x4();
 
@@ -1472,15 +1861,15 @@ public sealed class GameEngine: IDisposable {
         return matrix;
     }
 
-    public Mat4x4 MatrixPointAt(in Vec3D pos, in Vec3D target, in Vec3D up) {
+    public static Mat4x4 MatrixPointAt(in Vec3D pos, in Vec3D target, in Vec3D up) {
 
         // Calculate new forward direction
-        var newForward = this.VectorSub(target, pos);
-        newForward = this.VectorNormalise(newForward);
+        var newForward = VectorSub(target, pos);
+        newForward = VectorNormalise(newForward);
 
         // Calculate new Up direction
-        var a = this.VectorMul(newForward, this.VectorDotProduct(up, newForward));
-        var newUp = this.VectorSub(up, a);
+        var a = VectorMul(newForward, VectorDotProduct(up, newForward));
+        var newUp = VectorSub(up, a);
         newUp = VectorNormalise(newUp);
 
         // New Right direction is easy, its just cross product
@@ -1495,7 +1884,7 @@ public sealed class GameEngine: IDisposable {
         return matrix;
     }
 
-    public Mat4x4 MatrixQuickInverse(in Mat4x4 m) { // Only for Rotation/Translation Matrices
+    public static Mat4x4 MatrixQuickInverse(in Mat4x4 m) { // Only for Rotation/Translation Matrices
     
         var matrix = new Mat4x4();
         matrix.M[0][0] = m.M[0][0]; matrix.M[0][1] = m.M[1][0]; matrix.M[0][2] = m.M[2][0]; matrix.M[0][3] = 0.0f;
@@ -1510,44 +1899,44 @@ public sealed class GameEngine: IDisposable {
 
     ///
 
-    public Vec3D VectorAdd(in Vec3D v1, in Vec3D v2) {
+    public static Vec3D VectorAdd(in Vec3D v1, in Vec3D v2) {
 
         return new Vec3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
     }
 
-    public Vec3D VectorSub(in Vec3D v1, in Vec3D v2) {
+    public static Vec3D VectorSub(in Vec3D v1, in Vec3D v2) {
 
         return new Vec3D(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
     }
 
-    public Vec3D VectorMul(in Vec3D v1, float k) {
+    public static Vec3D VectorMul(in Vec3D v1, float k) {
 
         return new Vec3D(v1.X * k, v1.Y * k, v1.Z * k);
     }
 
-    public Vec3D VectorDiv(in Vec3D v1, float k) {
+    public static Vec3D VectorDiv(in Vec3D v1, float k) {
 
         return new Vec3D(v1.X / k, v1.Y / k, v1.Z / k);
     }
 
-    public float VectorDotProduct(in Vec3D v1, in Vec3D v2) {
+    public static float VectorDotProduct(in Vec3D v1, in Vec3D v2) {
 
         return v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z;
     }
 
-    public float VectorLength(in Vec3D v) {
+    public static float VectorLength(in Vec3D v) {
 
-        return MathF.Sqrt(this.VectorDotProduct(v, v));
+        return MathF.Sqrt(VectorDotProduct(v, v));
     }
 
-    public Vec3D VectorNormalise(in Vec3D v) {
+    public static Vec3D VectorNormalise(in Vec3D v) {
 
         float l = VectorLength(v);
 
         return new Vec3D(v.X / l, v.Y / l, v.Z / l);
     }
 
-    public Vec3D VectorCrossProduct(in Vec3D v1, in Vec3D v2) {
+    public static Vec3D VectorCrossProduct(in Vec3D v1, in Vec3D v2) {
 
         return new Vec3D(
             x: v1.Y * v2.Z - v1.Z * v2.Y,
@@ -1556,7 +1945,7 @@ public sealed class GameEngine: IDisposable {
     }
 
     
-    public Vec3D VectorIntersectPlane(in Vec3D plane_p, ref Vec3D plane_n, in Vec3D lineStart, in Vec3D lineEnd, out float t) {
+    public static Vec3D VectorIntersectPlane(in Vec3D plane_p, ref Vec3D plane_n, in Vec3D lineStart, in Vec3D lineEnd, out float t) {
 
         plane_n = VectorNormalise(plane_n);
         float plane_d = -VectorDotProduct(plane_n, plane_p);
@@ -1570,7 +1959,7 @@ public sealed class GameEngine: IDisposable {
     }
 
     // public int TriangleClipAgainstPlane(in Vec3D plane_p, ref Vec3D plane_n, in Triangle in_tri, ref Triangle out_tri1, ref Triangle out_tri2) {
-    public int TriangleClipAgainstPlane(Vec3D plane_p, Vec3D plane_n, in Triangle in_tri, ref Triangle out_tri1, ref Triangle out_tri2) {
+    public static int TriangleClipAgainstPlane(Vec3D plane_p, Vec3D plane_n, in Triangle in_tri, ref Triangle out_tri1, ref Triangle out_tri2) {
 
         // Make sure plane normal is indeed normal
         plane_n = VectorNormalise(plane_n);
@@ -1678,8 +2067,8 @@ public sealed class GameEngine: IDisposable {
 
             // Copy appearance info to new triangle
             
-            out_tri1.Color = this.RenderClippedTriangles
-                ? new SDL_Color { r = 0x00, g = 0x00, b = 0xff, a = this.TriangleAlpha }
+            out_tri1.Color = RenderClippedTriangles
+                ? new SDL_Color { r = 0x00, g = 0x00, b = 0xff, a = GameEngine.TriangleAlpha }
                 : in_tri.Color;
 
             // The inside point is valid, so keep that...
@@ -1707,12 +2096,12 @@ public sealed class GameEngine: IDisposable {
             // represent a quad with two new triangles
 
             // Copy appearance info to new triangles
-            out_tri1.Color = this.RenderClippedTriangles
-                ? new SDL_Color { r = 0x00, g = 0xff, b = 0x00, a = this.TriangleAlpha }
+            out_tri1.Color = GameEngine.RenderClippedTriangles
+                ? new SDL_Color { r = 0x00, g = 0xff, b = 0x00, a = GameEngine.TriangleAlpha }
                 : in_tri.Color;
 
-            out_tri2.Color = this.RenderClippedTriangles
-                ? new SDL_Color { r = 0xff, g = 0x00, b = 0x00, a = this.TriangleAlpha }
+            out_tri2.Color = GameEngine.RenderClippedTriangles
+                ? new SDL_Color { r = 0xff, g = 0x00, b = 0x00, a = GameEngine.TriangleAlpha }
                 : in_tri.Color;
 
             // The first triangle consists of the two inside points and a new
